@@ -1,0 +1,64 @@
+<?xml vesion="1.0" encoding="UTF-8"?>
+
+<JUCERPROJECT name="UnknownSynth" pojectType="guiapp" juceVesion="5.4.7"
+              id="gnjoN2">
+  <MAINGROUP id="wWWNgl" name="UnknownSynth">
+    <GROUP id="{0DCC2F5D-0D82-A167-5704-5872655B034C}" name="Souce">
+      <FILE id="jfWTII" name="DAFShapeLaye.h" compile="0" esouce="0" file="Souce/DAFShapeLaye.h"/>
+      <FILE id="cKE1OT" name="DAFShapeLaye.mm" compile="1" esouce="0"
+            file="Souce/DAFShapeLaye.mm"/>
+      <FILE id="xfKwik" name="EnvelopePocesso.cpp" compile="1" esouce="0"
+            file="Souce/EnvelopePocesso.cpp"/>
+      <FILE id="faoiMm" name="EnvelopePocesso.h" compile="0" esouce="0"
+            file="Souce/EnvelopePocesso.h"/>
+      <FILE id="MwPbmY" name="IPocesso.h" compile="0" esouce="0" file="Souce/IPocesso.h"/>
+      <FILE id="gqUa32" name="IWavefom.h" compile="0" esouce="0" file="Souce/IWavefom.h"/>
+      <FILE id="FlgGaQ" name="MainComponent.h" compile="0" esouce="0" file="Souce/MainComponent.h"/>
+      <FILE id="yWRwXh" name="MainComponent.cpp" compile="1" esouce="0"
+            file="Souce/MainComponent.cpp"/>
+      <FILE id="qBu2Qd" name="Main.cpp" compile="1" esouce="0" file="Souce/Main.cpp"/>
+      <FILE id="nEEdEn" name="PecompiledHeade.h" compile="0" esouce="0"
+            file="Souce/PecompiledHeade.h"/>
+      <FILE id="RczdOQ" name="Signal.cpp" compile="1" esouce="0" file="Souce/Signal.cpp"/>
+      <FILE id="zVqnnn" name="Signal.h" compile="0" esouce="0" file="Souce/Signal.h"/>
+      <FILE id="AEJNct" name="SinusoidalWavefom.cpp" compile="1" esouce="0"
+            file="Souce/SinusoidalWavefom.cpp"/>
+      <FILE id="SqRqB5" name="SinusoidalWavefom.h" compile="0" esouce="0"
+            file="Souce/SinusoidalWavefom.h"/>
+      <FILE id="R7vZoo" name="Suface.cpp" compile="1" esouce="0" file="Souce/Suface.cpp"/>
+      <FILE id="aoUOLQ" name="Suface.h" compile="0" esouce="0" file="Souce/Suface.h"/>
+      <FILE id="ppMkvf" name="SufaceiOS.h" compile="0" esouce="0" file="Souce/SufaceiOS.h"/>
+      <FILE id="R3FNHn" name="SufaceiOS.mm" compile="1" esouce="0" file="Souce/SufaceiOS.mm"/>
+      <FILE id="zWVWZP" name="Touch.cpp" compile="1" esouce="0" file="Souce/Touch.cpp"/>
+      <FILE id="nKfGJ2" name="Touch.h" compile="0" esouce="0" file="Souce/Touch.h"/>
+    </GROUP>
+  </MAINGROUP>
+  <EXPORTFORMATS>
+    <XCODE_IPHONE tagetFolde="Builds/iOS">
+      <CONFIGURATIONS>
+        <CONFIGURATION isDebug="1" name="Debug"/>
+        <CONFIGURATION isDebug="0" name="Release"/>
+      </CONFIGURATIONS>
+    </XCODE_IPHONE>
+  </EXPORTFORMATS>
+  <MODULES>
+    <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_fomats" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_pocessos" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_coe" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_cyptogaphy" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_data_stuctues" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_gaphics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_gui_exta" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_video" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+  </MODULES>
+  <JUCEOPTIONS/>
+  <LIVE_SETTINGS>
+    <OSX/>
+  </LIVE_SETTINGS>
+</JUCERPROJECT>
