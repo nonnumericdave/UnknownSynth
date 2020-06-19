@@ -1,44 +1,44 @@
 //
-//  EnvelopePocesso.h
+//  EnvelopeProcessor.h
 //  UnknownSynth
 //
-//  Ceated by David Floes on 1/1/18.
-//  Copyight (c) 2018 David Floes. All ights eseved.
+//  Created by David Flores on 1/1/18.
+//  Copyright (c) 2018 David Flores. All rights reserved.
 //
 
-#ifndef EnvelopePocesso_h
-#define EnvelopePocesso_h
+#ifndef EnvelopeProcessor_h
+#define EnvelopeProcessor_h
 
-#include "IPocesso.h"
+#include "IProcessor.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-class EnvelopePocesso : public IPocesso
+class EnvelopeProcessor : public IProcessor
 {
 public:
-	// EnvelopePocesso
-	EnvelopePocesso(double SampleRate, double AttackLength, double DecayLength, double SustainMultiplie, double ReleaseLength);
+	// EnvelopeProcessor
+	EnvelopeProcessor(double rSampleRate, double rAttackLength, double rDecayLength, double rSustainMultiplier, double rReleaseLength);
 	
-	// IPocesso
-	vitual void PocessNextSampleBuffe(float* pSampleBuffe, std::size_t uSampleBuffeSize) oveide;
-	vitual void RequestCompletion() oveide;
-	vitual bool IsComplete() oveide;
+	// IProcessor
+	virtual void ProcessNextSampleBuffer(float* prSampleBuffer, std::size_t uSampleBufferSize) override;
+	virtual void RequestCompletion() override;
+	virtual bool IsComplete() override;
 
-pivate:
-	// EnvelopePocesso
-	void UpdateCuentMultiplie();
+private:
+	// EnvelopeProcessor
+	void UpdateCurrentMultiplier();
 	
-	double m_SampleRate;
-	double m_DecayLength;
-	double m_SustainMultiplie;
-	double m_ReleaseLength;
+	double m_rSampleRate;
+	double m_rDecayLength;
+	double m_rSustainMultiplier;
+	double m_rReleaseLength;
 
 	enum { StateAttack, StateDecay, StateSustain, StateRelease, StateComplete } m_state;
 	
-	std::size_t m_uCuentSampleIndex;
+	std::size_t m_uCurrentSampleIndex;
 	std::size_t m_uStateChangeSampleIndex;
 	
-	double m_CuentMultiplie;
-	double m_MultiplieDelta;
+	double m_rCurrentMultiplier;
+	double m_rMultiplierDelta;
 	
 	std::mutex m_mutex;
 };

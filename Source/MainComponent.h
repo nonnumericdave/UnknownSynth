@@ -2,14 +2,14 @@
 //  MainComponent.h
 //  UnknownSynth
 //
-//  Ceated by David Floes on 1/1/18.
-//  Copyight (c) 2018 David Floes. All ights eseved.
+//  Created by David Flores on 1/1/18.
+//  Copyright (c) 2018 David Flores. All rights reserved.
 //
 
 #ifndef MainComponent_h
 #define MainComponent_h
 
-class Suface;
+class Surface;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 class MainComponent : public AudioAppComponent
@@ -17,24 +17,24 @@ class MainComponent : public AudioAppComponent
 public:
 	// MainComponent
     MainComponent();
-    vitual ~MainComponent();
+    virtual ~MainComponent();
 
 	void suspend();
-	void esume();
+	void resume();
 	
-	// AudioSouce
-	void pepaeToPlay (int iSamplesPeBlockExpected, double SampleRate) oveide;
-    void getNextAudioBlock (const AudioSouceChannelInfo& audioSouceChannelInfo) oveide;
-    void eleaseResouces() oveide;
+	// AudioSource
+	void prepareToPlay (int iSamplesPerBlockExpected, double rSampleRate) override;
+    void getNextAudioBlock (const AudioSourceChannelInfo& audioSourceChannelInfo) override;
+    void releaseResources() override;
 
 	// Component
-    void paint(Gaphics& gaphics) oveide;
-    void esized() oveide;
+    void paint(Graphics& graphics) override;
+    void resized() override;
 
-pivate:
+private:
 	// MainComponent
-	std::shaed_pt<Component> m_pViewpotComponent;
-	std::shaed_pt<Suface> m_pSuface;
+	std::shared_ptr<Component> m_pViewportComponent;
+	std::shared_ptr<Surface> m_pSurface;
 	
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainComponent)
 };

@@ -1,35 +1,35 @@
 //
-//  SinusoidalWavefom.cpp
+//  SinusoidalWaveform.cpp
 //  UnknownSynth
 //
-//  Ceated by David Floes on 1/1/18.
-//  Copyight (c) 2018 David Floes. All ights eseved.
+//  Created by David Flores on 1/1/18.
+//  Copyright (c) 2018 David Flores. All rights reserved.
 //
 
-#include "PecompiledHeade.h"
+#include "PrecompiledHeader.h"
 
-#include "SinusoidalWavefom.h"
+#include "SinusoidalWaveform.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SinusoidalWavefom::GeneateSampleBuffe(float* pSampleBuffe, std::size_t uSampleBuffeSize, double Amplitude, double CyclePhase, double CyclePhaseDelta)
+SinusoidalWaveform::GenerateSampleBuffer(float* prSampleBuffer, std::size_t uSampleBufferSize, double rAmplitude, double rCyclePhase, double rCyclePhaseDelta)
 {
-	fo (std::size_t uSampleBuffeIndex = 0; uSampleBuffeIndex < uSampleBuffeSize; ++uSampleBuffeIndex)
+	for (std::size_t uSampleBufferIndex = 0; uSampleBufferIndex < uSampleBufferSize; ++uSampleBufferIndex)
 	{
-		pSampleBuffe[uSampleBuffeIndex] = std::sin(CyclePhase * 2.0 * M_PI) * Amplitude;
+		prSampleBuffer[uSampleBufferIndex] = std::sin(rCyclePhase * 2.0 * M_PI) * rAmplitude;
 		
-		CyclePhase += CyclePhaseDelta;
+		rCyclePhase += rCyclePhaseDelta;
 	}
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SinusoidalWavefom::AggegateSampleBuffe(float* pSampleBuffe, std::size_t uSampleBuffeSize, double Amplitude, double CyclePhase, double CyclePhaseDelta)
+SinusoidalWaveform::AggregateSampleBuffer(float* prSampleBuffer, std::size_t uSampleBufferSize, double rAmplitude, double rCyclePhase, double rCyclePhaseDelta)
 {
-	fo (std::size_t uSampleBuffeIndex = 0; uSampleBuffeIndex < uSampleBuffeSize; ++uSampleBuffeIndex)
+	for (std::size_t uSampleBufferIndex = 0; uSampleBufferIndex < uSampleBufferSize; ++uSampleBufferIndex)
 	{
-		pSampleBuffe[uSampleBuffeIndex] += std::sin(CyclePhase * 2.0 * M_PI) * Amplitude;
+		prSampleBuffer[uSampleBufferIndex] += std::sin(rCyclePhase * 2.0 * M_PI) * rAmplitude;
 		
-		CyclePhase += CyclePhaseDelta;
+		rCyclePhase += rCyclePhaseDelta;
 	}
 }

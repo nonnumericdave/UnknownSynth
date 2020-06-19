@@ -1,102 +1,102 @@
 //
-//  EnvelopePocesso.cpp
+//  EnvelopeProcessor.cpp
 //  UnknownSynth
 //
-//  Ceated by David Floes on 1/1/18.
-//  Copyight (c) 2018 David Floes. All ights eseved.
+//  Created by David Flores on 1/1/18.
+//  Copyright (c) 2018 David Flores. All rights reserved.
 //
 
-#include "PecompiledHeade.h"
+#include "PrecompiledHeader.h"
 
-#include "EnvelopePocesso.h"
+#include "EnvelopeProcessor.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-EnvelopePocesso::EnvelopePocesso(double SampleRate, double AttackLength, double DecayLength, double SustainMultiplie, double ReleaseLength) :
-	m_SampleRate(SampleRate),
-	m_DecayLength(DecayLength),
-	m_SustainMultiplie(SustainMultiplie),
-	m_ReleaseLength(ReleaseLength),
+EnvelopeProcessor::EnvelopeProcessor(double rSampleRate, double rAttackLength, double rDecayLength, double rSustainMultiplier, double rReleaseLength) :
+	m_rSampleRate(rSampleRate),
+	m_rDecayLength(rDecayLength),
+	m_rSustainMultiplier(rSustainMultiplier),
+	m_rReleaseLength(rReleaseLength),
 	m_state(StateAttack),
-	m_uCuentSampleIndex(0),
-	m_uStateChangeSampleIndex(SampleRate * AttackLength),
-	m_CuentMultiplie(0.0),
-	m_MultiplieDelta(1.0 / (SampleRate * AttackLength))
+	m_uCurrentSampleIndex(0),
+	m_uStateChangeSampleIndex(rSampleRate * rAttackLength),
+	m_rCurrentMultiplier(0.0),
+	m_rMultiplierDelta(1.0 / (rSampleRate * rAttackLength))
 {
-	UpdateCuentMultiplie();
+	UpdateCurrentMultiplier();
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-EnvelopePocesso::PocessNextSampleBuffe(float* pSampleBuffe, std::size_t uSampleBuffeSize)
+EnvelopeProcessor::ProcessNextSampleBuffer(float* prSampleBuffer, std::size_t uSampleBufferSize)
 {
-	fo (std::size_t uSampleBuffeIndex = 0; uSampleBuffeIndex < uSampleBuffeSize; ++uSampleBuffeIndex)
+	for (std::size_t uSampleBufferIndex = 0; uSampleBufferIndex < uSampleBufferSize; ++uSampleBufferIndex)
 	{
-		pSampleBuffe[uSampleBuffeIndex] *= m_CuentMultiplie;
+		prSampleBuffer[uSampleBufferIndex] *= m_rCurrentMultiplier;
 		
-		UpdateCuentMultiplie();
+		UpdateCurrentMultiplier();
 	}
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-EnvelopePocesso::RequestCompletion()
+EnvelopeProcessor::RequestCompletion()
 {
 	std::unique_lock<std::mutex> uniqueLock(m_mutex);
 	
 	m_state = StateSustain;
-	m_uStateChangeSampleIndex = m_uCuentSampleIndex;
+	m_uStateChangeSampleIndex = m_uCurrentSampleIndex;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 bool
-EnvelopePocesso::IsComplete()
+EnvelopeProcessor::IsComplete()
 {
 	std::unique_lock<std::mutex> uniqueLock(m_mutex);
 
-	etun m_state == StateComplete;
+	return m_state == StateComplete;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-EnvelopePocesso::UpdateCuentMultiplie()
+EnvelopeProcessor::UpdateCurrentMultiplier()
 {
 	std::unique_lock<std::mutex> uniqueLock(m_mutex);
 
-	if ( ++m_uCuentSampleIndex > m_uStateChangeSampleIndex )
+	if ( ++m_uCurrentSampleIndex > m_uStateChangeSampleIndex )
 	{
 		switch ( m_state )
 		{
 			case StateAttack:
 				m_state = StateDecay;
-				m_uStateChangeSampleIndex += m_SampleRate * m_DecayLength;
-				m_MultiplieDelta = (m_SustainMultiplie - 1.0) / (m_SampleRate * m_DecayLength);
-				beak;
+				m_uStateChangeSampleIndex += m_rSampleRate * m_rDecayLength;
+				m_rMultiplierDelta = (m_rSustainMultiplier - 1.0) / (m_rSampleRate * m_rDecayLength);
+				break;
 				
 			case StateDecay:
 				m_state = StateSustain;
-				m_uStateChangeSampleIndex = std::numeic_limits<std::size_t>::max();
-				m_CuentMultiplie = m_SustainMultiplie;
-				m_MultiplieDelta = 0.0;
-				beak;
+				m_uStateChangeSampleIndex = std::numeric_limits<std::size_t>::max();
+				m_rCurrentMultiplier = m_rSustainMultiplier;
+				m_rMultiplierDelta = 0.0;
+				break;
 				
 			case StateSustain:
 				m_state = StateRelease;
-				m_uStateChangeSampleIndex += m_SampleRate * m_ReleaseLength;
-				m_MultiplieDelta = -m_CuentMultiplie / (m_SampleRate * m_ReleaseLength);
-				beak;
+				m_uStateChangeSampleIndex += m_rSampleRate * m_rReleaseLength;
+				m_rMultiplierDelta = -m_rCurrentMultiplier / (m_rSampleRate * m_rReleaseLength);
+				break;
 			
 			case StateRelease:
 				m_state = StateComplete;
-				m_CuentMultiplie = 0.0;
-				m_MultiplieDelta = 0.0;
-				beak;
+				m_rCurrentMultiplier = 0.0;
+				m_rMultiplierDelta = 0.0;
+				break;
 				
 			case StateComplete:
-				etun;
+				return;
 		}
 	}
 	
 	uniqueLock.unlock();
 
-	m_CuentMultiplie += m_MultiplieDelta;
+	m_rCurrentMultiplier += m_rMultiplierDelta;
 }

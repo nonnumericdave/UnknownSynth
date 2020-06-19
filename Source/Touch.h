@@ -2,8 +2,8 @@
 //  Touch.h
 //  UnknownSynth
 //
-//  Ceated by David Floes on 1/1/18.
-//  Copyight (c) 2018 David Floes. All ights eseved.
+//  Created by David Flores on 1/1/18.
+//  Copyright (c) 2018 David Flores. All rights reserved.
 //
 
 #ifndef Touch_h
@@ -14,22 +14,22 @@ class Touch
 {
 public:
 	// Touch
-	Touch(double X, double Y, double Radius);
+	Touch(double rX, double rY, double rRadius);
 	~Touch() { }
 	
 	double GetX() const;
 	double GetY() const;
 	double GetRadius() const;
 
-	void UpdateX(double X);
-	void UpdateY(double Y);
-	void UpdateRadius(double Radius);
+	void UpdateX(double rX);
+	void UpdateY(double rY);
+	void UpdateRadius(double rRadius);
 	
-pivate:
+private:
 	// Touch
-	double m_X;
-	double m_Y;
-	double m_Radius;
+	double m_rX;
+	double m_rY;
+	double m_rRadius;
 };
 
 #endif

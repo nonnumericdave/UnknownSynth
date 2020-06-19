@@ -2,19 +2,19 @@
 //  Touch.cpp
 //  UnknownSynth
 //
-//  Ceated by David Floes on 1/1/18.
-//  Copyight (c) 2018 David Floes. All ights eseved.
+//  Created by David Flores on 1/1/18.
+//  Copyright (c) 2018 David Flores. All rights reserved.
 //
 
-#include "PecompiledHeade.h"
+#include "PrecompiledHeader.h"
 
 #include "Touch.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Touch::Touch(double X, double Y, double Radius) :
-	m_X(X),
-	m_Y(Y),
-	m_Radius(Radius)
+Touch::Touch(double rX, double rY, double rRadius) :
+	m_rX(rX),
+	m_rY(rY),
+	m_rRadius(rRadius)
 {
 }
 
@@ -22,40 +22,40 @@ Touch::Touch(double X, double Y, double Radius) :
 double
 Touch::GetX() const
 {
-	etun m_X;
+	return m_rX;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 double
 Touch::GetY() const
 {
-	etun m_Y;
+	return m_rY;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 double
 Touch::GetRadius() const
 {
-	etun m_Radius;
+	return m_rRadius;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-Touch::UpdateX(double X)
+Touch::UpdateX(double rX)
 {
-	m_X = X;
+	m_rX = rX;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-Touch::UpdateY(double Y)
+Touch::UpdateY(double rY)
 {
-	m_Y = Y;
+	m_rY = rY;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-Touch::UpdateRadius(double Radius)
+Touch::UpdateRadius(double rRadius)
 {
-	m_Radius = Radius;
+	m_rRadius = rRadius;
 }

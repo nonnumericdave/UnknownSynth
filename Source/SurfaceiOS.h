@@ -1,58 +1,58 @@
 //
-//  SufaceiOS.h
+//  SurfaceiOS.h
 //  UnknownSynth
 //
-//  Ceated by David Floes on 1/1/18.
-//  Copyight (c) 2018 David Floes. All ights eseved.
+//  Created by David Flores on 1/1/18.
+//  Copyright (c) 2018 David Flores. All rights reserved.
 //
 
-#ifndef SufaceiOS_h
-#define SufaceiOS_h
+#ifndef SurfaceiOS_h
+#define SurfaceiOS_h
 
-#include "Suface.h"
+#include "Surface.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-class SufaceiOS : public Suface
+class SurfaceiOS : public Surface
 {
 public:
-	// SufaceiOS
-	class Pivate;
+	// SurfaceiOS
+	class Private;
 
-	vitual ~SufaceiOS();
+	virtual ~SurfaceiOS();
 
-potected:
-	// Suface
-	SufaceiOS(double SampleRate,
-			   double MinimumFequency,
-			   double MaximumFequency,
-			   double MinimumAmplitude,
-			   double MaximumAmplitude);
+protected:
+	// Surface
+	SurfaceiOS(double rSampleRate,
+			   double rMinimumFrequency,
+			   double rMaximumFrequency,
+			   double rMinimumAmplitude,
+			   double rMaximumAmplitude);
 
-	vitual std::shaed_pt<Component> GetComponent() oveide;
+	virtual std::shared_ptr<Component> GetComponent() override;
 
-	vitual void Suspend() oveide;
-	vitual void Resume() oveide;
+	virtual void Suspend() override;
+	virtual void Resume() override;
 
-	vitual void StatTouchVisualization(std::shaed_pt<Touch> pTouch) oveide;
-	vitual void UpdateTouchVisualization(std::shaed_pt<Touch> pTouch) oveide;
-	vitual void StopTouchVisualization(std::shaed_pt<Touch> pTouch) oveide;
-	vitual void StatSampleBuffeVisualization() oveide;
-	vitual void UpdateSampleBuffeVisualization(const float* pSampleBuffe, const std::size_t uSampleBuffeSize) oveide;
-	vitual void StopSampleBuffeVisualization() oveide;
+	virtual void StartTouchVisualization(std::shared_ptr<Touch> pTouch) override;
+	virtual void UpdateTouchVisualization(std::shared_ptr<Touch> pTouch) override;
+	virtual void StopTouchVisualization(std::shared_ptr<Touch> pTouch) override;
+	virtual void StartSampleBufferVisualization() override;
+	virtual void UpdateSampleBufferVisualization(const float* prSampleBuffer, const std::size_t uSampleBufferSize) override;
+	virtual void StopSampleBufferVisualization() override;
 	
-pivate:
-	// SufaceiOS
-	fiend Pivate;
+private:
+	// SurfaceiOS
+	friend Private;
 	
-	static bool m_bRegisteed;
+	static bool m_bRegistered;
 	
-	static std::shaed_pt<Suface> Ceate(double SampleRate,
-										   double MinimumFequency,
-										   double MaximumFequency,
-										   double MinimumAmplitude,
-										   double MaximumAmplitude);
+	static std::shared_ptr<Surface> Create(double rSampleRate,
+										   double rMinimumFrequency,
+										   double rMaximumFrequency,
+										   double rMinimumAmplitude,
+										   double rMaximumAmplitude);
 	
-	std::unique_pt<Pivate> m_pPivate;
+	std::unique_ptr<Private> m_pPrivate;
 };
 
 #endif

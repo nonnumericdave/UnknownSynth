@@ -2,34 +2,34 @@
 //  Signal.cpp
 //  UnknownSynth
 //
-//  Ceated by David Floes on 1/1/18.
-//  Copyight (c) 2018 David Floes. All ights eseved.
+//  Created by David Flores on 1/1/18.
+//  Copyright (c) 2018 David Flores. All rights reserved.
 //
 
-#include "PecompiledHeade.h"
+#include "PrecompiledHeader.h"
 
 #include "Signal.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Signal::Signal(double SampleRate, double InitialFequency, double InitialAmplitude, std::shaed_pt<IWavefom> pWavefom, std::shaed_pt<IPocesso> pPocesso) :
-	m_SampleRate(SampleRate),
-	m_Fequency(InitialFequency),
-	m_Amplitude(InitialAmplitude),
-	m_CyclePhase(0.0),
-	m_CyclePhaseDelta(0.0),
-	m_pWavefom(pWavefom),
-	m_pPocesso(pPocesso)
+Signal::Signal(double rSampleRate, double rInitialFrequency, double rInitialAmplitude, std::shared_ptr<IWaveform> pWaveform, std::shared_ptr<IProcessor> pProcessor) :
+	m_rSampleRate(rSampleRate),
+	m_rFrequency(rInitialFrequency),
+	m_rAmplitude(rInitialAmplitude),
+	m_rCyclePhase(0.0),
+	m_rCyclePhaseDelta(0.0),
+	m_pWaveform(pWaveform),
+	m_pProcessor(pProcessor)
 {
 	UpdateCyclePhaseDelta();
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-Signal::SetFequency(double UpdatedFequency)
+Signal::SetFrequency(double rUpdatedFrequency)
 {
 	std::unique_lock<std::mutex> uniqueLock(m_mutex);
 	
-	m_Fequency = UpdatedFequency;
+	m_rFrequency = rUpdatedFrequency;
 
 	uniqueLock.unlock();
 	
@@ -38,79 +38,79 @@ Signal::SetFequency(double UpdatedFequency)
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-Signal::SetAmplitude(double UpdatedAmplitude)
+Signal::SetAmplitude(double rUpdatedAmplitude)
 {
 	std::unique_lock<std::mutex> uniqueLock(m_mutex);
 	
-	m_Amplitude = UpdatedAmplitude;
+	m_rAmplitude = rUpdatedAmplitude;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-Signal::GeneateNextSampleBuffe(float* pSampleBuffe, std::size_t uSampleBuffeSize)
+Signal::GenerateNextSampleBuffer(float* prSampleBuffer, std::size_t uSampleBufferSize)
 {
 	std::unique_lock<std::mutex> uniqueLock(m_mutex);
 
-	asset( m_pWavefom != nullpt );
+	assert( m_pWaveform != nullptr );
 	
-	double Amplitude = m_Amplitude;
-	double CyclePhase = m_CyclePhase;
-	double CyclePhaseDelta = m_CyclePhaseDelta;
+	double rAmplitude = m_rAmplitude;
+	double rCyclePhase = m_rCyclePhase;
+	double rCyclePhaseDelta = m_rCyclePhaseDelta;
 
-	std::shaed_pt<IWavefom> pWavefom(m_pWavefom);
-	std::shaed_pt<IPocesso> pPocesso(m_pPocesso);
+	std::shared_ptr<IWaveform> pWaveform(m_pWaveform);
+	std::shared_ptr<IProcessor> pProcessor(m_pProcessor);
 	
 	uniqueLock.unlock();
 
-	pWavefom->GeneateSampleBuffe(pSampleBuffe, uSampleBuffeSize, Amplitude, CyclePhase, CyclePhaseDelta);
+	pWaveform->GenerateSampleBuffer(prSampleBuffer, uSampleBufferSize, rAmplitude, rCyclePhase, rCyclePhaseDelta);
 		
-	UpdateCyclePhase(uSampleBuffeSize);
+	UpdateCyclePhase(uSampleBufferSize);
 	
-	if ( pPocesso != nullpt )
-		pPocesso->PocessNextSampleBuffe(pSampleBuffe, uSampleBuffeSize);
+	if ( pProcessor != nullptr )
+		pProcessor->ProcessNextSampleBuffer(prSampleBuffer, uSampleBufferSize);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-Signal::AggegateNextSampleBuffe(float* pSampleBuffe, std::size_t uSampleBuffeSize)
+Signal::AggregateNextSampleBuffer(float* prSampleBuffer, std::size_t uSampleBufferSize)
 {
 	std::unique_lock<std::mutex> uniqueLock(m_mutex);
 	
-	asset( m_pWavefom != nullpt );
+	assert( m_pWaveform != nullptr );
 	
-	double Amplitude = m_Amplitude;
-	double CyclePhase = m_CyclePhase;
-	double CyclePhaseDelta = m_CyclePhaseDelta;
+	double rAmplitude = m_rAmplitude;
+	double rCyclePhase = m_rCyclePhase;
+	double rCyclePhaseDelta = m_rCyclePhaseDelta;
 
-	std::shaed_pt<IWavefom> pWavefom(m_pWavefom);
-	std::shaed_pt<IPocesso> pPocesso(m_pPocesso);
+	std::shared_ptr<IWaveform> pWaveform(m_pWaveform);
+	std::shared_ptr<IProcessor> pProcessor(m_pProcessor);
 	
 	uniqueLock.unlock();
 	
-	if ( pPocesso != nullpt )
+	if ( pProcessor != nullptr )
 	{
-		std::unique_pt<float[]> pTempoaySampleBuffe = std::make_unique<float[]>(uSampleBuffeSize);
+		std::unique_ptr<float[]> prTemporarySampleBuffer = std::make_unique<float[]>(uSampleBufferSize);
 		
-		GeneateNextSampleBuffe(&pTempoaySampleBuffe[0], uSampleBuffeSize);
+		GenerateNextSampleBuffer(&prTemporarySampleBuffer[0], uSampleBufferSize);
 		
-		fo (std::size_t uSampleBuffeIndex = 0; uSampleBuffeIndex < uSampleBuffeSize; ++uSampleBuffeIndex)
-			pSampleBuffe[uSampleBuffeIndex] += pTempoaySampleBuffe[uSampleBuffeIndex];
+		for (std::size_t uSampleBufferIndex = 0; uSampleBufferIndex < uSampleBufferSize; ++uSampleBufferIndex)
+			prSampleBuffer[uSampleBufferIndex] += prTemporarySampleBuffer[uSampleBufferIndex];
 	}
 	else
 	{
-		pWavefom->AggegateSampleBuffe(pSampleBuffe, uSampleBuffeSize, Amplitude, CyclePhase, CyclePhaseDelta);
+		pWaveform->AggregateSampleBuffer(prSampleBuffer, uSampleBufferSize, rAmplitude, rCyclePhase, rCyclePhaseDelta);
 		
-		UpdateCyclePhase(uSampleBuffeSize);
+		UpdateCyclePhase(uSampleBufferSize);
 	}
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-std::shaed_pt<IPocesso>
-Signal::GetPocesso()
+std::shared_ptr<IProcessor>
+Signal::GetProcessor()
 {
 	std::unique_lock<std::mutex> uniqueLock(m_mutex);
 	
-	etun m_pPocesso;
+	return m_pProcessor;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -119,8 +119,8 @@ Signal::UpdateCyclePhase(std::size_t uSampleCount)
 {
 	std::unique_lock<std::mutex> uniqueLock(m_mutex);
 	
-	double IntegalPat;
-	m_CyclePhase = std::modf(m_CyclePhase + uSampleCount * m_CyclePhaseDelta, &IntegalPat);
+	double rIntegralPart;
+	m_rCyclePhase = std::modf(m_rCyclePhase + uSampleCount * m_rCyclePhaseDelta, &rIntegralPart);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -129,5 +129,5 @@ Signal::UpdateCyclePhaseDelta()
 {
 	std::unique_lock<std::mutex> uniqueLock(m_mutex);
 
-	m_CyclePhaseDelta = m_Fequency / m_SampleRate;
+	m_rCyclePhaseDelta = m_rFrequency / m_rSampleRate;
 }

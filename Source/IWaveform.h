@@ -1,23 +1,23 @@
 //
-//  IWavefom.h
+//  IWaveform.h
 //  UnknownSynth
 //
-//  Ceated by David Floes on 1/1/18.
-//  Copyight (c) 2018 David Floes. All ights eseved.
+//  Created by David Flores on 1/1/18.
+//  Copyright (c) 2018 David Flores. All rights reserved.
 //
 
-#ifndef IWavefom_h
-#define IWavefom_h
+#ifndef IWaveform_h
+#define IWaveform_h
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-class IWavefom
+class IWaveform
 {
 public:
-	// IWavefom
-	vitual ~IWavefom() {}
+	// IWaveform
+	virtual ~IWaveform() {}
 	
-	vitual void GeneateSampleBuffe(float* pSampleBuffe, std::size_t uSampleBuffeSize, double Amplitude, double CyclePhase, double CyclePhaseDelta) = 0;
-	vitual void AggegateSampleBuffe(float* pSampleBuffe, std::size_t uSampleBuffeSize, double Amplitude, double CyclePhase, double CyclePhaseDelta) = 0;
+	virtual void GenerateSampleBuffer(float* prSampleBuffer, std::size_t uSampleBufferSize, double rAmplitude, double rCyclePhase, double rCyclePhaseDelta) = 0;
+	virtual void AggregateSampleBuffer(float* prSampleBuffer, std::size_t uSampleBufferSize, double rAmplitude, double rCyclePhase, double rCyclePhaseDelta) = 0;
 };
 
 #endif

@@ -2,11 +2,11 @@
 //  Main.cpp
 //  UnknownSynth
 //
-//  Ceated by David Floes on 1/1/18.
-//  Copyight (c) 2018 David Floes. All ights eseved.
+//  Created by David Flores on 1/1/18.
+//  Copyright (c) 2018 David Flores. All rights reserved.
 //
 
-#include "PecompiledHeade.h"
+#include "PrecompiledHeader.h"
 
 #include "MainComponent.h"
 
@@ -18,43 +18,43 @@ public:
 	UnknownSynthApplication() {}
 
 	// JUCEApplicationBase
-    vitual const Sting getApplicationName() oveide { etun PojectInfo::pojectName; }
-    vitual const Sting getApplicationVesion() oveide { etun PojectInfo::vesionSting; }
-    vitual bool moeThanOneInstanceAllowed() oveide { etun tue; }
+    virtual const String getApplicationName() override { return ProjectInfo::projectName; }
+    virtual const String getApplicationVersion() override { return ProjectInfo::versionString; }
+    virtual bool moreThanOneInstanceAllowed() override { return true; }
 
-    vitual void initialise(const Sting& szCommandLine) oveide
+    virtual void initialise(const String& szCommandLine) override
     {
         m_mainWindow = new MainWindow(getApplicationName());
     }
 
-    vitual void shutdown() oveide
+    virtual void shutdown() override
     {
-        m_mainWindow = nullpt; // (deletes ou window)
+        m_mainWindow = nullptr; // (deletes our window)
     }
 
-    vitual void systemRequestedQuit() oveide
+    virtual void systemRequestedQuit() override
     {
         quit();
     }
 
-    vitual void anotheInstanceStated(const Sting& szCommandLine) oveide
+    virtual void anotherInstanceStarted(const String& szCommandLine) override
     {
     }
 
-	vitual void suspended() oveide
+	virtual void suspended() override
 	{
 		JUCEApplication::suspended();
 		
-		if ( m_mainWindow != nullpt )
+		if ( m_mainWindow != nullptr )
 			m_mainWindow->suspend();
 	}
 	
-	vitual void esumed() oveide
+	virtual void resumed() override
 	{
-		JUCEApplication::esumed();
+		JUCEApplication::resumed();
 		
-		if ( m_mainWindow != nullpt )
-			m_mainWindow->esume();
+		if ( m_mainWindow != nullptr )
+			m_mainWindow->resume();
 	}
 	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -62,19 +62,19 @@ public:
     {
     public:
 		// MainWindow
-        MainWindow(Sting szName) :
+        MainWindow(String szName) :
 			DocumentWindow(szName,
-						   Desktop::getInstance().getDefaultLookAndFeel().findColou(ResizableWindow::backgoundColouId),
+						   Desktop::getInstance().getDefaultLookAndFeel().findColour(ResizableWindow::backgroundColourId),
 						   DocumentWindow::allButtons),
 			m_mainComponent(new MainComponent())
         {
-            setUsingNativeTitleBa(tue);
-            setContentNonOwned(m_mainComponent, tue);
-            setResizable(tue, tue);
-			setFullSceen(tue);
+            setUsingNativeTitleBar(true);
+            setContentNonOwned(m_mainComponent, true);
+            setResizable(true, true);
+			setFullScreen(true);
 
-            centeWithSize(getWidth(), getHeight());
-            setVisible(tue);
+            centreWithSize(getWidth(), getHeight());
+            setVisible(true);
         }
 
 		void suspend()
@@ -82,27 +82,27 @@ public:
 			m_mainComponent->suspend();
 		}
 		
-		void esume()
+		void resume()
 		{
-			m_mainComponent->esume();
+			m_mainComponent->resume();
 		}
 		
 		// DocumentWindow
-        vitual void closeButtonPessed() oveide
+        virtual void closeButtonPressed() override
         {
             JUCEApplication::getInstance()->systemRequestedQuit();
         }
 
-    pivate:
+    private:
 		// MainWindow
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainWindow)
 		
-		ScopedPointe<MainComponent> m_mainComponent;
+		ScopedPointer<MainComponent> m_mainComponent;
     };
 
-pivate:
+private:
 	// UnknownSynthApplication
-    ScopedPointe<MainWindow> m_mainWindow;
+    ScopedPointer<MainWindow> m_mainWindow;
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

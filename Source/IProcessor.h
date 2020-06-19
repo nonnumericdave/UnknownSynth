@@ -1,24 +1,24 @@
 //
-//  IPocesso.h
+//  IProcessor.h
 //  UnknownSynth
 //
-//  Ceated by David Floes on 1/1/18.
-//  Copyight (c) 2018 David Floes. All ights eseved.
+//  Created by David Flores on 1/1/18.
+//  Copyright (c) 2018 David Flores. All rights reserved.
 //
 
-#ifndef IPocesso_h
-#define IPocesso_h
+#ifndef IProcessor_h
+#define IProcessor_h
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-class IPocesso
+class IProcessor
 {
 public:
-	// IPocesso
-	vitual ~IPocesso() {}
+	// IProcessor
+	virtual ~IProcessor() {}
 	
-	vitual void PocessNextSampleBuffe(float* pSampleBuffe, std::size_t uSampleBuffeSize) = 0;
-	vitual void RequestCompletion() = 0;
-	vitual bool IsComplete() = 0;
+	virtual void ProcessNextSampleBuffer(float* prSampleBuffer, std::size_t uSampleBufferSize) = 0;
+	virtual void RequestCompletion() = 0;
+	virtual bool IsComplete() = 0;
 };
 
 #endif

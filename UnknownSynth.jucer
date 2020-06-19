@@ -1,40 +1,40 @@
-<?xml vesion="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT name="UnknownSynth" pojectType="guiapp" juceVesion="5.4.7"
+<JUCERPROJECT name="UnknownSynth" projectType="guiapp" jucerVersion="5.4.7"
               id="gnjoN2">
   <MAINGROUP id="wWWNgl" name="UnknownSynth">
-    <GROUP id="{0DCC2F5D-0D82-A167-5704-5872655B034C}" name="Souce">
-      <FILE id="jfWTII" name="DAFShapeLaye.h" compile="0" esouce="0" file="Souce/DAFShapeLaye.h"/>
-      <FILE id="cKE1OT" name="DAFShapeLaye.mm" compile="1" esouce="0"
-            file="Souce/DAFShapeLaye.mm"/>
-      <FILE id="xfKwik" name="EnvelopePocesso.cpp" compile="1" esouce="0"
-            file="Souce/EnvelopePocesso.cpp"/>
-      <FILE id="faoiMm" name="EnvelopePocesso.h" compile="0" esouce="0"
-            file="Souce/EnvelopePocesso.h"/>
-      <FILE id="MwPbmY" name="IPocesso.h" compile="0" esouce="0" file="Souce/IPocesso.h"/>
-      <FILE id="gqUa32" name="IWavefom.h" compile="0" esouce="0" file="Souce/IWavefom.h"/>
-      <FILE id="FlgGaQ" name="MainComponent.h" compile="0" esouce="0" file="Souce/MainComponent.h"/>
-      <FILE id="yWRwXh" name="MainComponent.cpp" compile="1" esouce="0"
-            file="Souce/MainComponent.cpp"/>
-      <FILE id="qBu2Qd" name="Main.cpp" compile="1" esouce="0" file="Souce/Main.cpp"/>
-      <FILE id="nEEdEn" name="PecompiledHeade.h" compile="0" esouce="0"
-            file="Souce/PecompiledHeade.h"/>
-      <FILE id="RczdOQ" name="Signal.cpp" compile="1" esouce="0" file="Souce/Signal.cpp"/>
-      <FILE id="zVqnnn" name="Signal.h" compile="0" esouce="0" file="Souce/Signal.h"/>
-      <FILE id="AEJNct" name="SinusoidalWavefom.cpp" compile="1" esouce="0"
-            file="Souce/SinusoidalWavefom.cpp"/>
-      <FILE id="SqRqB5" name="SinusoidalWavefom.h" compile="0" esouce="0"
-            file="Souce/SinusoidalWavefom.h"/>
-      <FILE id="R7vZoo" name="Suface.cpp" compile="1" esouce="0" file="Souce/Suface.cpp"/>
-      <FILE id="aoUOLQ" name="Suface.h" compile="0" esouce="0" file="Souce/Suface.h"/>
-      <FILE id="ppMkvf" name="SufaceiOS.h" compile="0" esouce="0" file="Souce/SufaceiOS.h"/>
-      <FILE id="R3FNHn" name="SufaceiOS.mm" compile="1" esouce="0" file="Souce/SufaceiOS.mm"/>
-      <FILE id="zWVWZP" name="Touch.cpp" compile="1" esouce="0" file="Souce/Touch.cpp"/>
-      <FILE id="nKfGJ2" name="Touch.h" compile="0" esouce="0" file="Souce/Touch.h"/>
+    <GROUP id="{0DCC2F5D-0D82-A167-5704-5872655B034C}" name="Source">
+      <FILE id="jfWTII" name="DAFShapeLayer.h" compile="0" resource="0" file="Source/DAFShapeLayer.h"/>
+      <FILE id="cKE1OT" name="DAFShapeLayer.mm" compile="1" resource="0"
+            file="Source/DAFShapeLayer.mm"/>
+      <FILE id="xfKwik" name="EnvelopeProcessor.cpp" compile="1" resource="0"
+            file="Source/EnvelopeProcessor.cpp"/>
+      <FILE id="faoiMm" name="EnvelopeProcessor.h" compile="0" resource="0"
+            file="Source/EnvelopeProcessor.h"/>
+      <FILE id="MwPbmY" name="IProcessor.h" compile="0" resource="0" file="Source/IProcessor.h"/>
+      <FILE id="gqUa32" name="IWaveform.h" compile="0" resource="0" file="Source/IWaveform.h"/>
+      <FILE id="FlgGaQ" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
+      <FILE id="yWRwXh" name="MainComponent.cpp" compile="1" resource="0"
+            file="Source/MainComponent.cpp"/>
+      <FILE id="qBu2Qd" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+      <FILE id="nEEdEn" name="PrecompiledHeader.h" compile="0" resource="0"
+            file="Source/PrecompiledHeader.h"/>
+      <FILE id="RczdOQ" name="Signal.cpp" compile="1" resource="0" file="Source/Signal.cpp"/>
+      <FILE id="zVqnnn" name="Signal.h" compile="0" resource="0" file="Source/Signal.h"/>
+      <FILE id="AEJNct" name="SinusoidalWaveform.cpp" compile="1" resource="0"
+            file="Source/SinusoidalWaveform.cpp"/>
+      <FILE id="SqRqB5" name="SinusoidalWaveform.h" compile="0" resource="0"
+            file="Source/SinusoidalWaveform.h"/>
+      <FILE id="R7vZoo" name="Surface.cpp" compile="1" resource="0" file="Source/Surface.cpp"/>
+      <FILE id="aoUOLQ" name="Surface.h" compile="0" resource="0" file="Source/Surface.h"/>
+      <FILE id="ppMkvf" name="SurfaceiOS.h" compile="0" resource="0" file="Source/SurfaceiOS.h"/>
+      <FILE id="R3FNHn" name="SurfaceiOS.mm" compile="1" resource="0" file="Source/SurfaceiOS.mm"/>
+      <FILE id="zWVWZP" name="Touch.cpp" compile="1" resource="0" file="Source/Touch.cpp"/>
+      <FILE id="nKfGJ2" name="Touch.h" compile="0" resource="0" file="Source/Touch.h"/>
     </GROUP>
   </MAINGROUP>
   <EXPORTFORMATS>
-    <XCODE_IPHONE tagetFolde="Builds/iOS">
+    <XCODE_IPHONE targetFolder="Builds/iOS">
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug"/>
         <CONFIGURATION isDebug="0" name="Release"/>
@@ -44,16 +44,16 @@
   <MODULES>
     <MODULE id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
     <MODULE id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
-    <MODULE id="juce_audio_fomats" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
-    <MODULE id="juce_audio_pocessos" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
     <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
-    <MODULE id="juce_coe" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
-    <MODULE id="juce_cyptogaphy" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
-    <MODULE id="juce_data_stuctues" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
     <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
-    <MODULE id="juce_gaphics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
     <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
-    <MODULE id="juce_gui_exta" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
+    <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
     <MODULE id="juce_opengl" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
     <MODULE id="juce_video" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
   </MODULES>

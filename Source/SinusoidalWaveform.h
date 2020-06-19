@@ -1,23 +1,23 @@
 //
-//  SinusoidalWavefom.h
+//  SinusoidalWaveform.h
 //  UnknownSynth
 //
-//  Ceated by David Floes on 1/1/18.
-//  Copyight (c) 2018 David Floes. All ights eseved.
+//  Created by David Flores on 1/1/18.
+//  Copyright (c) 2018 David Flores. All rights reserved.
 //
 
-#ifndef SinusoidalWavefom_h
-#define SinusoidalWavefom_h
+#ifndef SinusoidalWaveform_h
+#define SinusoidalWaveform_h
 
-#include "IWavefom.h"
+#include "IWaveform.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-class SinusoidalWavefom : public IWavefom
+class SinusoidalWaveform : public IWaveform
 {
 public:
-	// IWavefom
-	vitual void GeneateSampleBuffe(float* pSampleBuffe, std::size_t uSampleBuffeSize, double Amplitude, double CyclePhase, double CyclePhaseDelta) oveide;
-	vitual void AggegateSampleBuffe(float* pSampleBuffe, std::size_t uSampleBuffeSize, double Amplitude, double CyclePhase, double CyclePhaseDelta) oveide;
+	// IWaveform
+	virtual void GenerateSampleBuffer(float* prSampleBuffer, std::size_t uSampleBufferSize, double rAmplitude, double rCyclePhase, double rCyclePhaseDelta) override;
+	virtual void AggregateSampleBuffer(float* prSampleBuffer, std::size_t uSampleBufferSize, double rAmplitude, double rCyclePhase, double rCyclePhaseDelta) override;
 };
 
 #endif

@@ -1,16 +1,16 @@
 //
-//  PecompiledHeade.h
+//  PrecompiledHeader.h
 //  UnknownSynth
 //
-//  Ceated by David Floes on 1/1/18.
-//  Copyight (c) 2018 David Floes. All ights eseved.
+//  Created by David Flores on 1/1/18.
+//  Copyright (c) 2018 David Flores. All rights reserved.
 //
 
-#ifndef PecompiledHeade_h
-#define PecompiledHeade_h
+#ifndef PrecompiledHeader_h
+#define PrecompiledHeader_h
 
 #if defined(__OBJC__)
-#	impot <UIKit/UIKit.h>
+#	import <UIKit/UIKit.h>
 #endif
 
 #include <cmath>
@@ -18,10 +18,10 @@
 #include <map>
 #include <mutex>
 #include <set>
-#include <vecto>
+#include <vector>
 
-#include <Acceleate/Acceleate.h>
+#include <Accelerate/Accelerate.h>
 
-#include "../JuceLibayCode/JuceHeade.h"
+#include "../JuceLibraryCode/JuceHeader.h"
 
 #endif

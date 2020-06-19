@@ -1,94 +1,94 @@
 //
-//  Suface.h
+//  Surface.h
 //  UnknownSynth
 //
-//  Ceated by David Floes on 1/1/18.
-//  Copyight (c) 2018 David Floes. All ights eseved.
+//  Created by David Flores on 1/1/18.
+//  Copyright (c) 2018 David Flores. All rights reserved.
 //
 
-#ifndef Suface_h
-#define Suface_h
+#ifndef Surface_h
+#define Surface_h
 
 class Signal;
 class Touch;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-class Suface
+class Surface
 {
 public:
-	// Suface
-	typedef std::shaed_pt<Suface> (*PFN_Ceate)(double SampleRate,
-												   double MinimumFequency,
-												   double MaximumFequency,
-												   double MinimumAmplitude,
-												   double MaximumAmplitude);
+	// Surface
+	typedef std::shared_ptr<Surface> (*PFN_Create)(double rSampleRate,
+												   double rMinimumFrequency,
+												   double rMaximumFrequency,
+												   double rMinimumAmplitude,
+												   double rMaximumAmplitude);
 	
-	static bool Registe(PFN_Ceate pfnCeate);
+	static bool Register(PFN_Create pfnCreate);
 	
-	static std::shaed_pt<Suface> Ceate(double SampleRate,
-										   double MinimumFequency,
-										   double MaximumFequency,
-										   double MinimumAmplitude,
-										   double MaximumAmplitude);
+	static std::shared_ptr<Surface> Create(double rSampleRate,
+										   double rMinimumFrequency,
+										   double rMaximumFrequency,
+										   double rMinimumAmplitude,
+										   double rMaximumAmplitude);
 	
-	vitual ~Suface();
+	virtual ~Surface();
 	
-	void Stat();
+	void Start();
 	void Stop();
 	
-	void UpdateSampleRate(double SampleRate);
-	void GeneateNextSampleBuffe(float* pSampleBuffe, const std::size_t uSampleBuffeSize);
+	void UpdateSampleRate(double rSampleRate);
+	void GenerateNextSampleBuffer(float* prSampleBuffer, const std::size_t uSampleBufferSize);
 
-	vitual std::shaed_pt<Component> GetComponent() = 0;
+	virtual std::shared_ptr<Component> GetComponent() = 0;
 
-	vitual void Suspend() = 0;
-	vitual void Resume() = 0;
+	virtual void Suspend() = 0;
+	virtual void Resume() = 0;
 	
-potected:
-	// Suface
-	Suface(double Width,
-			double Height,
-			double SampleRate,
-			double MinimumFequency,
-			double MaximumFequency,
-			double MinimumAmplitude,
-			double MaximumAmplitude);
+protected:
+	// Surface
+	Surface(double rWidth,
+			double rHeight,
+			double rSampleRate,
+			double rMinimumFrequency,
+			double rMaximumFrequency,
+			double rMinimumAmplitude,
+			double rMaximumAmplitude);
 
-	void UpdateDimensions(double Width, double Height);
+	void UpdateDimensions(double rWidth, double rHeight);
 	void UpdateVisualizations();
 	
-	void StatTouch(std::shaed_pt<Touch> pTouch);
-	void UpdateTouch(std::shaed_pt<Touch> pTouch);
-	void StopTouch(std::shaed_pt<Touch> pTouch);
+	void StartTouch(std::shared_ptr<Touch> pTouch);
+	void UpdateTouch(std::shared_ptr<Touch> pTouch);
+	void StopTouch(std::shared_ptr<Touch> pTouch);
 	
-	vitual void StatTouchVisualization(std::shaed_pt<Touch> pTouch) = 0;
-	vitual void UpdateTouchVisualization(std::shaed_pt<Touch> pTouch) = 0;
-	vitual void StopTouchVisualization(std::shaed_pt<Touch> pTouch) = 0;
+	virtual void StartTouchVisualization(std::shared_ptr<Touch> pTouch) = 0;
+	virtual void UpdateTouchVisualization(std::shared_ptr<Touch> pTouch) = 0;
+	virtual void StopTouchVisualization(std::shared_ptr<Touch> pTouch) = 0;
 	
-	vitual void StatSampleBuffeVisualization() = 0;
-	vitual void UpdateSampleBuffeVisualization(const float* pSampleBuffe, const std::size_t uSampleBuffeSize) = 0;
-	vitual void StopSampleBuffeVisualization() = 0;
+	virtual void StartSampleBufferVisualization() = 0;
+	virtual void UpdateSampleBufferVisualization(const float* prSampleBuffer, const std::size_t uSampleBufferSize) = 0;
+	virtual void StopSampleBufferVisualization() = 0;
 	
-pivate:
-	// Suface
-	void GetFequencyAndAmplitudeFoTouch(std::shaed_pt<Touch> pTouch,
-										  double& Fequency,
-										  double& Amplitude);
+private:
+	// Surface
+	void GetFrequencyAndAmplitudeForTouch(std::shared_ptr<Touch> pTouch,
+										  double& rFrequency,
+										  double& rAmplitude);
 	
-	double m_Width;
-	double m_Height;
+	double m_rWidth;
+	double m_rHeight;
 	
-	double m_SampleRate;
-	double m_MinimumFequency;
-	double m_MaximumFequency;
-	double m_MinimumAmplitude;
-	double m_MaximumAmplitude;
+	double m_rSampleRate;
+	double m_rMinimumFrequency;
+	double m_rMaximumFrequency;
+	double m_rMinimumAmplitude;
+	double m_rMaximumAmplitude;
 	
 	std::mutex m_mutex;
-	std::map<std::shaed_pt<Touch>, std::shaed_pt<Signal> > m_mapTouchSignal;
-	std::set<std::shaed_pt<Signal> > m_setWaitingFoCompletionSignals;
+	std::map<std::shared_ptr<Touch>, std::shared_ptr<Signal> > m_mapTouchSignal;
+	std::set<std::shared_ptr<Signal> > m_setWaitingForCompletionSignals;
 	
-	std::vecto<float> m_aUnvisualizedSampleBuffe;
+	std::vector<float> m_arUnvisualizedSampleBuffer;
 };
 
 #endif

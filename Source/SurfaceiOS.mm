@@ -1,37 +1,37 @@
 //
-//  SufaceiOS.mm
+//  SurfaceiOS.mm
 //  UnknownSynth
 //
-//  Ceated by David Floes on 1/1/18.
-//  Copyight (c) 2018 David Floes. All ights eseved.
+//  Created by David Flores on 1/1/18.
+//  Copyright (c) 2018 David Flores. All rights reserved.
 //
 
-#include "PecompiledHeade.h"
+#include "PrecompiledHeader.h"
 
-#include "SufaceiOS.h"
+#include "SurfaceiOS.h"
 
-#include "DAFShapeLaye.h"
+#include "DAFShapeLayer.h"
 #include "Touch.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-bool SufaceiOS::m_bRegisteed = Suface::Registe(SufaceiOS::Ceate);
+bool SurfaceiOS::m_bRegistered = Surface::Register(SurfaceiOS::Create);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-@inteface DAFSufaceView : UIView
+@interface DAFSurfaceView : UIView
 
 // UIView
-- (void)setFame:(CGRect)ectFame;
-- (void)setBounds:(CGRect)ectBounds;
+- (void)setFrame:(CGRect)rectFrame;
+- (void)setBounds:(CGRect)rectBounds;
 
-// DAFSufaceView
-- (instancetype)initWithPivate:(SufaceiOS::Pivate*)pPivate;
-- (void)detachPivate;
+// DAFSurfaceView
+- (instancetype)initWithPrivate:(SurfaceiOS::Private*)pPrivate;
+- (void)detachPrivate;
 
 - (void)updateDimensions;
 - (void)updateAnimations;
 
-- (CGPoint)pointInSufaceFoTouch:(UITouch*)pTouch;
-- (CGPoint)pointInViewFoTouch:(std::shaed_pt<Touch>)pTouch;
+- (CGPoint)pointInSurfaceForTouch:(UITouch*)pTouch;
+- (CGPoint)pointInViewForTouch:(std::shared_ptr<Touch>)pTouch;
 
 - (void)touchesBegan:(NSSet<UITouch*>*)pTouchSet withEvent:(UIEvent*)pEvent;
 - (void)touchesMoved:(NSSet<UITouch*>*)pTouchSet withEvent:(UIEvent*)pEvent;
@@ -39,303 +39,303 @@ bool SufaceiOS::m_bRegisteed = Suface::Registe(SufaceiOS::Ceate);
 - (void)touchesCancelled:(NSSet<UITouch*>*)pTouchSet withEvent:(UIEvent*)pEvent;
 
 - (void)suspend;
-- (void)esume;
+- (void)resume;
 
-- (void)statAnimationWithTouch:(std::shaed_pt<Touch>)pTouch;
-- (void)updateAnimationWithTouch:(std::shaed_pt<Touch>)pTouch;
-- (void)stopAnimationWithTouch:(std::shaed_pt<Touch>)pTouch;
-- (void)statSampleBuffeAnimation;
-- (void)updateAnimationWithSampleBuffe:(const float*)pSampleBuffe size:(const std::size_t)uSampleBuffeSize;
-- (void)stopSampleBuffeAnimation;
+- (void)startAnimationWithTouch:(std::shared_ptr<Touch>)pTouch;
+- (void)updateAnimationWithTouch:(std::shared_ptr<Touch>)pTouch;
+- (void)stopAnimationWithTouch:(std::shared_ptr<Touch>)pTouch;
+- (void)startSampleBufferAnimation;
+- (void)updateAnimationWithSampleBuffer:(const float*)prSampleBuffer size:(const std::size_t)uSampleBufferSize;
+- (void)stopSampleBufferAnimation;
 
 @end
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-class SufaceiOS::Pivate
+class SurfaceiOS::Private
 {
 public:
-	// Pivate
-	Pivate(SufaceiOS* pSuface);
-	~Pivate();
+	// Private
+	Private(SurfaceiOS* pSurface);
+	~Private();
 	
-	std::shaed_pt<Component> GetComponent();
+	std::shared_ptr<Component> GetComponent();
 	
-	void DetachSuface();
+	void DetachSurface();
 	
-	void UpdateDimensions(double Width, double Height);
+	void UpdateDimensions(double rWidth, double rHeight);
 	void UpdateAnimations();
 	
-	void StatTouch(std::shaed_pt<Touch> pTouch);
-	void UpdateTouch(std::shaed_pt<Touch> pTouch);
-	void StopTouch(std::shaed_pt<Touch> pTouch);
+	void StartTouch(std::shared_ptr<Touch> pTouch);
+	void UpdateTouch(std::shared_ptr<Touch> pTouch);
+	void StopTouch(std::shared_ptr<Touch> pTouch);
 	
 	void Suspend();
 	void Resume();
-	void StatTouchAnimation(std::shaed_pt<Touch> pTouch);
-	void UpdateTouchAnimation(std::shaed_pt<Touch> pTouch);
-	void StopTouchAnimation(std::shaed_pt<Touch> pTouch);
-	void StatSampleBuffeAnimation();
-	void UpdateSampleBuffeAnimation(const float* pSampleBuffe, const std::size_t uSampleBuffeSize);
-	void StopSampleBuffeAnimation();
+	void StartTouchAnimation(std::shared_ptr<Touch> pTouch);
+	void UpdateTouchAnimation(std::shared_ptr<Touch> pTouch);
+	void StopTouchAnimation(std::shared_ptr<Touch> pTouch);
+	void StartSampleBufferAnimation();
+	void UpdateSampleBufferAnimation(const float* prSampleBuffer, const std::size_t uSampleBufferSize);
+	void StopSampleBufferAnimation();
 	
-pivate:
-	// Pivate
-	SufaceiOS* m_pSuface;
-	DAFSufaceView* m_pSufaceView;
-	std::shaed_pt<UIViewComponent> m_pViewComponent;
+private:
+	// Private
+	SurfaceiOS* m_pSurface;
+	DAFSurfaceView* m_pSurfaceView;
+	std::shared_ptr<UIViewComponent> m_pViewComponent;
 };
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-@implementation DAFSufaceView
+@implementation DAFSurfaceView
 {
-	SufaceiOS::Pivate* m_pPivate;
+	SurfaceiOS::Private* m_pPrivate;
 	
-	std::map<UITouch*, std::shaed_pt<Touch> > m_mapTouchTouch;
-	std::map<std::shaed_pt<Touch>, CAShapeLaye*> m_mapTouchShapeLaye;
+	std::map<UITouch*, std::shared_ptr<Touch> > m_mapTouchTouch;
+	std::map<std::shared_ptr<Touch>, CAShapeLayer*> m_mapTouchShapeLayer;
 	
 	std::size_t m_uSamplePointRows;
 	std::size_t m_uSamplePointColumns;
 
-	std::size_t m_uSampleBuffeSize;
-	std::size_t m_uSampleBuffeStatIndex;
+	std::size_t m_uSampleBufferSize;
+	std::size_t m_uSampleBufferStartIndex;
 
-	std::vecto<DAFShapeLayeFloat> m_aVisualizationColumnMultiplieBuffe;
+	std::vector<DAFShapeLayerFloat> m_arVisualizationColumnMultiplierBuffer;
 	
-	std::vecto<DAFShapeLayeFloat> m_aNomalizedSampleBuffe;
+	std::vector<DAFShapeLayerFloat> m_arNormalizedSampleBuffer;
 	
-	std::vecto<DAFShapeLayeVetex> m_aSampleBuffeVisualizationRowPoints;
+	std::vector<DAFShapeLayerVertex> m_aSampleBufferVisualizationRowPoints;
 	
-	DAFShapeLaye* m_pShapeLaye;
+	DAFShapeLayer* m_pShapeLayer;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- (void)setFame:(CGRect)ectFame
+- (void)setFrame:(CGRect)rectFrame
 {
-	[supe setFame:ectFame];
+	[super setFrame:rectFrame];
 	
 	[self updateDimensions];
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- (void)setBounds:(CGRect)ectBounds
+- (void)setBounds:(CGRect)rectBounds
 {
-	[supe setBounds:ectBounds];
+	[super setBounds:rectBounds];
 
 	[self updateDimensions];
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- (instancetype)initWithPivate:(SufaceiOS::Pivate*)pPivate
+- (instancetype)initWithPrivate:(SurfaceiOS::Private*)pPrivate
 {
-	self = [supe init];
+	self = [super init];
 	
 	if ( self != nil )
 	{
-		self.backgoundColo = [UIColo blackColo];
+		self.backgroundColor = [UIColor blackColor];
 		self.multipleTouchEnabled = YES;
 		
-		m_pPivate = pPivate;
+		m_pPrivate = pPrivate;
 		
 		m_uSamplePointRows = 32;
 		m_uSamplePointColumns = 128;
 		
-		m_uSampleBuffeSize = m_uSamplePointRows * m_uSamplePointColumns;
-		m_uSampleBuffeStatIndex = 0;
-		m_aNomalizedSampleBuffe.esize(m_uSampleBuffeSize, 0.0);
+		m_uSampleBufferSize = m_uSamplePointRows * m_uSamplePointColumns;
+		m_uSampleBufferStartIndex = 0;
+		m_arNormalizedSampleBuffer.resize(m_uSampleBufferSize, 0.0);
 		
-		const std::size_t uVisualizationColumnMultiplieBuffeSize = m_uSamplePointColumns / 2;
-		m_aVisualizationColumnMultiplieBuffe.esize(uVisualizationColumnMultiplieBuffeSize, 0.0);
+		const std::size_t uVisualizationColumnMultiplierBufferSize = m_uSamplePointColumns / 2;
+		m_arVisualizationColumnMultiplierBuffer.resize(uVisualizationColumnMultiplierBufferSize, 0.0);
 		
-		DAFShapeLayeFloat StatVisualizationColumnMultiplie = 0;
-		const DAFShapeLayeFloat DeltaVisualizationColumnMultiplie = 1.0 / (uVisualizationColumnMultiplieBuffeSize - 1.0);
-		const int iVisualizationColumnMultiplieBuffeSize = static_cast<int>(uVisualizationColumnMultiplieBuffeSize);
+		DAFShapeLayerFloat rStartVisualizationColumnMultiplier = 0;
+		const DAFShapeLayerFloat rDeltaVisualizationColumnMultiplier = 1.0 / (uVisualizationColumnMultiplierBufferSize - 1.0);
+		const int iVisualizationColumnMultiplierBufferSize = static_cast<int>(uVisualizationColumnMultiplierBufferSize);
 		
 #if DAF_SHAPE_LAYER_FLOAT_IS_DOUBLE
-		::vDSP_vampD(&StatVisualizationColumnMultiplie, &DeltaVisualizationColumnMultiplie, &m_aVisualizationColumnMultiplieBuffe[0], 1, uVisualizationColumnMultiplieBuffeSize);
-		::vvsqt(&m_aVisualizationColumnMultiplieBuffe[0], &m_aVisualizationColumnMultiplieBuffe[0], &iVisualizationColumnMultiplieBuffeSize);
-		::vDSP_vampmulD(&m_aVisualizationColumnMultiplieBuffe[0], 1, &StatVisualizationColumnMultiplie, &DeltaVisualizationColumnMultiplie, &m_aVisualizationColumnMultiplieBuffe[0], 1, uVisualizationColumnMultiplieBuffeSize);
+		::vDSP_vrampD(&rStartVisualizationColumnMultiplier, &rDeltaVisualizationColumnMultiplier, &m_arVisualizationColumnMultiplierBuffer[0], 1, uVisualizationColumnMultiplierBufferSize);
+		::vvsqrt(&m_arVisualizationColumnMultiplierBuffer[0], &m_arVisualizationColumnMultiplierBuffer[0], &iVisualizationColumnMultiplierBufferSize);
+		::vDSP_vrampmulD(&m_arVisualizationColumnMultiplierBuffer[0], 1, &rStartVisualizationColumnMultiplier, &rDeltaVisualizationColumnMultiplier, &m_arVisualizationColumnMultiplierBuffer[0], 1, uVisualizationColumnMultiplierBufferSize);
 #else
-		::vDSP_vamp(&StatVisualizationColumnMultiplie, &DeltaVisualizationColumnMultiplie, &m_aVisualizationColumnMultiplieBuffe[0], 1, uVisualizationColumnMultiplieBuffeSize);
-		::vvsqtf(&m_aVisualizationColumnMultiplieBuffe[0], &m_aVisualizationColumnMultiplieBuffe[0], &iVisualizationColumnMultiplieBuffeSize);
-		::vDSP_vampmul(&m_aVisualizationColumnMultiplieBuffe[0], 1, &StatVisualizationColumnMultiplie, &DeltaVisualizationColumnMultiplie, &m_aVisualizationColumnMultiplieBuffe[0], 1, uVisualizationColumnMultiplieBuffeSize);
+		::vDSP_vramp(&rStartVisualizationColumnMultiplier, &rDeltaVisualizationColumnMultiplier, &m_arVisualizationColumnMultiplierBuffer[0], 1, uVisualizationColumnMultiplierBufferSize);
+		::vvsqrtf(&m_arVisualizationColumnMultiplierBuffer[0], &m_arVisualizationColumnMultiplierBuffer[0], &iVisualizationColumnMultiplierBufferSize);
+		::vDSP_vrampmul(&m_arVisualizationColumnMultiplierBuffer[0], 1, &rStartVisualizationColumnMultiplier, &rDeltaVisualizationColumnMultiplier, &m_arVisualizationColumnMultiplierBuffer[0], 1, uVisualizationColumnMultiplierBufferSize);
 #endif
 		
-		m_pShapeLaye = [[DAFShapeLaye alloc] init];
-		m_pShapeLaye.fame = self.laye.bounds;
+		m_pShapeLayer = [[DAFShapeLayer alloc] init];
+		m_pShapeLayer.frame = self.layer.bounds;
 		
-		DAFSufaceView* __weak pSelf = self;
-		m_pShapeLaye.animationDawBlock =
+		DAFSurfaceView* __weak pSelf = self;
+		m_pShapeLayer.animationDrawBlock =
 			^void(void)
 			{
 				[pSelf updateAnimations];
 			};
 
-		[self.laye addSublaye:m_pShapeLaye];
+		[self.layer addSublayer:m_pShapeLayer];
 	}
 	
-	etun self;
+	return self;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- (void)detachPivate
+- (void)detachPrivate
 {
-	m_pPivate = nullpt;
+	m_pPrivate = nullptr;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - (void)updateDimensions
 {
-	const CGRect ectBounds = self.bounds;
+	const CGRect rectBounds = self.bounds;
 
-	m_pShapeLaye.fame = ectBounds;
+	m_pShapeLayer.frame = rectBounds;
 
-	if ( m_pPivate != nullpt )
-		m_pPivate->UpdateDimensions(ectBounds.size.width, ectBounds.size.height);
+	if ( m_pPrivate != nullptr )
+		m_pPrivate->UpdateDimensions(rectBounds.size.width, rectBounds.size.height);
 	
-	m_aSampleBuffeVisualizationRowPoints.esize(m_uSamplePointColumns * 2, {0.0, 0.0, 0.0});
+	m_aSampleBufferVisualizationRowPoints.resize(m_uSamplePointColumns * 2, {0.0, 0.0, 0.0});
 	
-	const DAFShapeLayeFloat StatX = -1.0;
-	const DAFShapeLayeFloat DeltaX = 2.0 / (m_uSamplePointColumns - 1.0);
+	const DAFShapeLayerFloat rStartX = -1.0;
+	const DAFShapeLayerFloat rDeltaX = 2.0 / (m_uSamplePointColumns - 1.0);
 
 #if DAF_SHAPE_LAYER_FLOAT_IS_DOUBLE
-	::vDSP_vampD(&StatX, &DeltaX, &m_aSampleBuffeVisualizationRowPoints[0].X, 3 * 2, m_uSamplePointColumns);
-	::vDSP_vampD(&StatX, &DeltaX, &m_aSampleBuffeVisualizationRowPoints[3].X, 3 * 2, m_uSamplePointColumns);
+	::vDSP_vrampD(&rStartX, &rDeltaX, &m_aSampleBufferVisualizationRowPoints[0].rX, 3 * 2, m_uSamplePointColumns);
+	::vDSP_vrampD(&rStartX, &rDeltaX, &m_aSampleBufferVisualizationRowPoints[3].rX, 3 * 2, m_uSamplePointColumns);
 #else
-	::vDSP_vamp(&StatX, &DeltaX, &m_aSampleBuffeVisualizationRowPoints[0].X, 3 * 2, m_uSamplePointColumns);
-	::vDSP_vamp(&StatX, &DeltaX, &m_aSampleBuffeVisualizationRowPoints[3].X, 3 * 2, m_uSamplePointColumns);
+	::vDSP_vramp(&rStartX, &rDeltaX, &m_aSampleBufferVisualizationRowPoints[0].rX, 3 * 2, m_uSamplePointColumns);
+	::vDSP_vramp(&rStartX, &rDeltaX, &m_aSampleBufferVisualizationRowPoints[3].rX, 3 * 2, m_uSamplePointColumns);
 #endif
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - (void)updateAnimations
 {
-	if ( m_pPivate != nullpt )
-		m_pPivate->UpdateAnimations();
+	if ( m_pPrivate != nullptr )
+		m_pPrivate->UpdateAnimations();
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- (CGPoint)pointInSufaceFoTouch:(UITouch*)pTouch
+- (CGPoint)pointInSurfaceForTouch:(UITouch*)pTouch
 {
-	const CGRect ectBounds = self.bounds;
-	const CGFloat MinBoundsX = ::CGRectGetMinX(ectBounds);
-	const CGFloat MaxBoundsX = ::CGRectGetMaxX(ectBounds);
-	const CGFloat MinBoundsY = ::CGRectGetMinY(ectBounds);
-	const CGFloat MaxBoundsY = ::CGRectGetMaxY(ectBounds);
+	const CGRect rectBounds = self.bounds;
+	const CGFloat rMinBoundsX = ::CGRectGetMinX(rectBounds);
+	const CGFloat rMaxBoundsX = ::CGRectGetMaxX(rectBounds);
+	const CGFloat rMinBoundsY = ::CGRectGetMinY(rectBounds);
+	const CGFloat rMaxBoundsY = ::CGRectGetMaxY(rectBounds);
 
-	const double MinSufaceX = 0;
-	const double MaxSufaceX = ectBounds.size.width;
-	const double MinSufaceY = 0;
-	const double MaxSufaceY = ectBounds.size.height;
+	const double rMinSurfaceX = 0;
+	const double rMaxSurfaceX = rectBounds.size.width;
+	const double rMinSurfaceY = 0;
+	const double rMaxSurfaceY = rectBounds.size.height;
 	
 	const CGPoint pointTouch = [pTouch locationInView:self];
-	double TouchX = pointTouch.x;
-	double TouchY = pointTouch.y;
+	double rTouchX = pointTouch.x;
+	double rTouchY = pointTouch.y;
 	
-	etun CGPointMake(
-		(MinSufaceX * (MaxBoundsX - TouchX) + MaxSufaceX * (TouchX - MinBoundsX)) / (MaxBoundsX - MinBoundsX),
-		(MinSufaceY * (MaxBoundsY - TouchY) + MaxSufaceY * (TouchY - MinBoundsY)) / (MaxBoundsY - MinBoundsY));
+	return CGPointMake(
+		(rMinSurfaceX * (rMaxBoundsX - rTouchX) + rMaxSurfaceX * (rTouchX - rMinBoundsX)) / (rMaxBoundsX - rMinBoundsX),
+		(rMinSurfaceY * (rMaxBoundsY - rTouchY) + rMaxSurfaceY * (rTouchY - rMinBoundsY)) / (rMaxBoundsY - rMinBoundsY));
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- (CGPoint)pointInViewFoTouch:(std::shaed_pt<Touch>)pTouch
+- (CGPoint)pointInViewForTouch:(std::shared_ptr<Touch>)pTouch
 {
-	const CGRect ectBounds = self.bounds;
-	const CGFloat MinBoundsX = ::CGRectGetMinX(ectBounds);
-	const CGFloat MaxBoundsX = ::CGRectGetMaxX(ectBounds);
-	const CGFloat MinBoundsY = ::CGRectGetMinY(ectBounds);
-	const CGFloat MaxBoundsY = ::CGRectGetMaxY(ectBounds);
+	const CGRect rectBounds = self.bounds;
+	const CGFloat rMinBoundsX = ::CGRectGetMinX(rectBounds);
+	const CGFloat rMaxBoundsX = ::CGRectGetMaxX(rectBounds);
+	const CGFloat rMinBoundsY = ::CGRectGetMinY(rectBounds);
+	const CGFloat rMaxBoundsY = ::CGRectGetMaxY(rectBounds);
 	
-	const double MinSufaceX = 0;
-	const double MaxSufaceX = ectBounds.size.width;
-	const double MinSufaceY = 0;
-	const double MaxSufaceY = ectBounds.size.height;
+	const double rMinSurfaceX = 0;
+	const double rMaxSurfaceX = rectBounds.size.width;
+	const double rMinSurfaceY = 0;
+	const double rMaxSurfaceY = rectBounds.size.height;
 	
-	double TouchX = pTouch->GetX();
-	double TouchY = pTouch->GetY();
+	double rTouchX = pTouch->GetX();
+	double rTouchY = pTouch->GetY();
 	
-	etun CGPointMake(
-		(MinBoundsX * (MaxSufaceX - TouchX) + MaxBoundsX * (TouchX - MinSufaceX)) / (MaxSufaceX - MinSufaceX),
-		(MinBoundsY * (MaxSufaceY - TouchY) + MaxBoundsY * (TouchY - MinSufaceY)) / (MaxSufaceY - MinSufaceY));
+	return CGPointMake(
+		(rMinBoundsX * (rMaxSurfaceX - rTouchX) + rMaxBoundsX * (rTouchX - rMinSurfaceX)) / (rMaxSurfaceX - rMinSurfaceX),
+		(rMinBoundsY * (rMaxSurfaceY - rTouchY) + rMaxBoundsY * (rTouchY - rMinSurfaceY)) / (rMaxSurfaceY - rMinSurfaceY));
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - (void)touchesBegan:(NSSet<UITouch*>*)pTouchSet withEvent:(UIEvent*)pEvent
 {
-	[supe touchesBegan:pTouchSet withEvent:pEvent];
+	[super touchesBegan:pTouchSet withEvent:pEvent];
 	
-	if ( m_pPivate == nullpt )
-		etun;
+	if ( m_pPrivate == nullptr )
+		return;
 	
-	fo (UITouch* pTouch in pTouchSet)
+	for (UITouch* pTouch in pTouchSet)
 	{
-		const CGPoint pointSuface = [self pointInSufaceFoTouch:pTouch];
+		const CGPoint pointSurface = [self pointInSurfaceForTouch:pTouch];
 		
-		std::shaed_pt<Touch> pSufaceTouch = std::make_shaed<Touch>(pointSuface.x, pointSuface.y, pTouch.majoRadius);
+		std::shared_ptr<Touch> pSurfaceTouch = std::make_shared<Touch>(pointSurface.x, pointSurface.y, pTouch.majorRadius);
 		
-		m_mapTouchTouch[pTouch] = pSufaceTouch;
+		m_mapTouchTouch[pTouch] = pSurfaceTouch;
 	
-		m_pPivate->StatTouch(pSufaceTouch);
+		m_pPrivate->StartTouch(pSurfaceTouch);
 	}
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - (void)touchesMoved:(NSSet<UITouch*>*)pTouchSet withEvent:(UIEvent*)pEvent
 {
-	[supe touchesMoved:pTouchSet withEvent:pEvent];
+	[super touchesMoved:pTouchSet withEvent:pEvent];
 	
-	if ( m_pPivate == nullpt )
-		etun;
+	if ( m_pPrivate == nullptr )
+		return;
 
-	fo (UITouch* pTouch in pTouchSet)
+	for (UITouch* pTouch in pTouchSet)
 	{
-		std::shaed_pt<Touch> pSufaceTouch = m_mapTouchTouch[pTouch];
+		std::shared_ptr<Touch> pSurfaceTouch = m_mapTouchTouch[pTouch];
 		
-		const CGPoint pointSuface = [self pointInSufaceFoTouch:pTouch];
-		pSufaceTouch->UpdateX(pointSuface.x);
-		pSufaceTouch->UpdateY(pointSuface.y);
-		pSufaceTouch->UpdateRadius(pTouch.majoRadius);
+		const CGPoint pointSurface = [self pointInSurfaceForTouch:pTouch];
+		pSurfaceTouch->UpdateX(pointSurface.x);
+		pSurfaceTouch->UpdateY(pointSurface.y);
+		pSurfaceTouch->UpdateRadius(pTouch.majorRadius);
 
-		m_pPivate->UpdateTouch(pSufaceTouch);
+		m_pPrivate->UpdateTouch(pSurfaceTouch);
 	}
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - (void)touchesEnded:(NSSet<UITouch*>*)pTouchSet withEvent:(UIEvent*)pEvent
 {
-	[supe touchesEnded:pTouchSet withEvent:pEvent];
+	[super touchesEnded:pTouchSet withEvent:pEvent];
 	
-	if ( m_pPivate == nullpt )
-		etun;
+	if ( m_pPrivate == nullptr )
+		return;
 	
-	fo (UITouch* pTouch in pTouchSet)
+	for (UITouch* pTouch in pTouchSet)
 	{
 		auto const& it = m_mapTouchTouch.find(pTouch);
 		
-		std::shaed_pt<Touch> pSufaceTouch = it->second;
+		std::shared_ptr<Touch> pSurfaceTouch = it->second;
 
-		m_mapTouchTouch.ease(it);
+		m_mapTouchTouch.erase(it);
 		
-		m_pPivate->StopTouch(pSufaceTouch);
+		m_pPrivate->StopTouch(pSurfaceTouch);
 	}
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - (void)touchesCancelled:(NSSet<UITouch*>*)pTouchSet withEvent:(UIEvent*)pEvent
 {
-	[supe touchesCancelled:pTouchSet withEvent:pEvent];
+	[super touchesCancelled:pTouchSet withEvent:pEvent];
 	
-	if ( m_pPivate == nullpt )
-		etun;
+	if ( m_pPrivate == nullptr )
+		return;
 	
-	fo (UITouch* pTouch in pTouchSet)
+	for (UITouch* pTouch in pTouchSet)
 	{
 		auto const& it = m_mapTouchTouch.find(pTouch);
 		
-		std::shaed_pt<Touch> pSufaceTouch = it->second;
+		std::shared_ptr<Touch> pSurfaceTouch = it->second;
 		
-		m_mapTouchTouch.ease(it);
+		m_mapTouchTouch.erase(it);
 		
-		m_pPivate->StopTouch(pSufaceTouch);
+		m_pPrivate->StopTouch(pSurfaceTouch);
 	}
 }
 
@@ -345,389 +345,389 @@ pivate:
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- (void)esume
+- (void)resume
 {
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- (void)statAnimationWithTouch:(std::shaed_pt<Touch>)pTouch
+- (void)startAnimationWithTouch:(std::shared_ptr<Touch>)pTouch
 {
-	[CATansaction begin];
-	[CATansaction setAnimationDuation:0.0];
+	[CATransaction begin];
+	[CATransaction setAnimationDuration:0.0];
 
-	CAShapeLaye* pShapeLaye = [CAShapeLaye laye];
-	pShapeLaye.zPosition = 1;
+	CAShapeLayer* pShapeLayer = [CAShapeLayer layer];
+	pShapeLayer.zPosition = 1;
 	
-	[CATansaction setCompletionBlock:^{
-		[CATansaction begin];
-		[CATansaction setAnimationDuation:0.1];
+	[CATransaction setCompletionBlock:^{
+		[CATransaction begin];
+		[CATransaction setAnimationDuration:0.1];
 		
-		pShapeLaye.affineTansfom = CGAffineTansfomIdentity;
-		pShapeLaye.fillColo = [UIColo whiteColo].CGColo;
+		pShapeLayer.affineTransform = CGAffineTransformIdentity;
+		pShapeLayer.fillColor = [UIColor whiteColor].CGColor;
 
-		[CATansaction commit];
+		[CATransaction commit];
 	}];
 	
-	pShapeLaye.backgoundColo = [UIColo cleaColo].CGColo;
-	pShapeLaye.stokeColo = [UIColo whiteColo].CGColo;
-	pShapeLaye.lineWidth = 2.0;
+	pShapeLayer.backgroundColor = [UIColor clearColor].CGColor;
+	pShapeLayer.strokeColor = [UIColor whiteColor].CGColor;
+	pShapeLayer.lineWidth = 2.0;
 
-	pShapeLaye.fillColo = [UIColo cleaColo].CGColo;
+	pShapeLayer.fillColor = [UIColor clearColor].CGColor;
 	
-	const double Radius = pTouch->GetRadius();
-	const double Diamete = 2.0 * Radius;
-	const CGRect boundsFame = ::CGRectMake(0.0, 0.0, Diamete, Diamete);
-	CGPathRef efPath = ::CGPathCeateWithEllipseInRect(boundsFame, nullpt);
+	const double rRadius = pTouch->GetRadius();
+	const double rDiameter = 2.0 * rRadius;
+	const CGRect boundsFrame = ::CGRectMake(0.0, 0.0, rDiameter, rDiameter);
+	CGPathRef refPath = ::CGPathCreateWithEllipseInRect(boundsFrame, nullptr);
 	
-	pShapeLaye.fame = boundsFame;
-	pShapeLaye.path = efPath;
+	pShapeLayer.frame = boundsFrame;
+	pShapeLayer.path = refPath;
 	
-	const CGPoint pointView = [self pointInViewFoTouch:pTouch];
-	pShapeLaye.position = pointView;
+	const CGPoint pointView = [self pointInViewForTouch:pTouch];
+	pShapeLayer.position = pointView;
 	
-	pShapeLaye.affineTansfom = ::CGAffineTansfomMakeScale(4.0, 4.0);
+	pShapeLayer.affineTransform = ::CGAffineTransformMakeScale(4.0, 4.0);
 	
-	[self.laye addSublaye:pShapeLaye];
+	[self.layer addSublayer:pShapeLayer];
 	
-	[CATansaction commit];
+	[CATransaction commit];
 	
-	m_mapTouchShapeLaye[pTouch] = pShapeLaye;
+	m_mapTouchShapeLayer[pTouch] = pShapeLayer;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- (void)updateAnimationWithTouch:(std::shaed_pt<Touch>)pTouch
+- (void)updateAnimationWithTouch:(std::shared_ptr<Touch>)pTouch
 {
-	[CATansaction begin];
-	[CATansaction setAnimationDuation:0.0];
+	[CATransaction begin];
+	[CATransaction setAnimationDuration:0.0];
 	
-	CAShapeLaye* pShapeLaye = m_mapTouchShapeLaye[pTouch];
+	CAShapeLayer* pShapeLayer = m_mapTouchShapeLayer[pTouch];
 
-	const CGPoint pointView = [self pointInViewFoTouch:pTouch];
-	pShapeLaye.position = pointView;
+	const CGPoint pointView = [self pointInViewForTouch:pTouch];
+	pShapeLayer.position = pointView;
 
-	[CATansaction commit];
+	[CATransaction commit];
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- (void)stopAnimationWithTouch:(std::shaed_pt<Touch>)pTouch
+- (void)stopAnimationWithTouch:(std::shared_ptr<Touch>)pTouch
 {
-	auto const& it = m_mapTouchShapeLaye.find(pTouch);
+	auto const& it = m_mapTouchShapeLayer.find(pTouch);
 	
-	CAShapeLaye* pShapeLaye = it->second;
+	CAShapeLayer* pShapeLayer = it->second;
 
-	[CATansaction begin];
-	[CATansaction setAnimationDuation:0.1];
+	[CATransaction begin];
+	[CATransaction setAnimationDuration:0.1];
 	
-	[CATansaction setCompletionBlock:^{
-		[pShapeLaye emoveFomSupelaye];
+	[CATransaction setCompletionBlock:^{
+		[pShapeLayer removeFromSuperlayer];
 	}];
 	
-	pShapeLaye.affineTansfom = ::CGAffineTansfomMakeScale(4.0, 4.0);
-	pShapeLaye.fillColo = [UIColo cleaColo].CGColo;
+	pShapeLayer.affineTransform = ::CGAffineTransformMakeScale(4.0, 4.0);
+	pShapeLayer.fillColor = [UIColor clearColor].CGColor;
 	
-	[CATansaction commit];
+	[CATransaction commit];
 	
-	m_mapTouchShapeLaye.ease(it);
+	m_mapTouchShapeLayer.erase(it);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- (void)statSampleBuffeAnimation
+- (void)startSampleBufferAnimation
 {
-	[m_pShapeLaye statAnimation];
+	[m_pShapeLayer startAnimation];
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- (void)updateAnimationWithSampleBuffe:(const float*)pSampleBuffe size:(const std::size_t)uSampleBuffeSize
+- (void)updateAnimationWithSampleBuffer:(const float*)prSampleBuffer size:(const std::size_t)uSampleBufferSize
 {
-	const DAFShapeLayeFloat RowDelta = 2.0 / (m_uSamplePointRows + 1);
-	const DAFShapeLayeFloat Scale = RowDelta * 4.0;
+	const DAFShapeLayerFloat rRowDelta = 2.0 / (m_uSamplePointRows + 1);
+	const DAFShapeLayerFloat rScale = rRowDelta * 4.0;
 	
-	const std::size_t uSampleBuffeFistStatIndex = m_uSampleBuffeSize < uSampleBuffeSize ? uSampleBuffeSize - m_uSampleBuffeSize : 0;
-	const std::size_t uSampleBuffeFistCopySize = std::min<std::size_t>(m_uSampleBuffeSize - m_uSampleBuffeStatIndex, uSampleBuffeSize);
+	const std::size_t uSampleBufferFirstStartIndex = m_uSampleBufferSize < uSampleBufferSize ? uSampleBufferSize - m_uSampleBufferSize : 0;
+	const std::size_t uSampleBufferFirstCopySize = std::min<std::size_t>(m_uSampleBufferSize - m_uSampleBufferStartIndex, uSampleBufferSize);
 #if DAF_SHAPE_LAYER_FLOAT_IS_DOUBLE
-	::vDSP_vspdp(&pSampleBuffe[uSampleBuffeFistStatIndex], 1, &m_aNomalizedSampleBuffe[m_uSampleBuffeStatIndex], 1, uSampleBuffeFistCopySize);
-	::vDSP_vabsD(&m_aNomalizedSampleBuffe[m_uSampleBuffeStatIndex], 1, &m_aNomalizedSampleBuffe[m_uSampleBuffeStatIndex], 1, uSampleBuffeFistCopySize);
-	::vDSP_vsmulD(&m_aNomalizedSampleBuffe[m_uSampleBuffeStatIndex], 1, &Scale, &m_aNomalizedSampleBuffe[m_uSampleBuffeStatIndex], 1, uSampleBuffeFistCopySize);
+	::vDSP_vspdp(&prSampleBuffer[uSampleBufferFirstStartIndex], 1, &m_arNormalizedSampleBuffer[m_uSampleBufferStartIndex], 1, uSampleBufferFirstCopySize);
+	::vDSP_vabsD(&m_arNormalizedSampleBuffer[m_uSampleBufferStartIndex], 1, &m_arNormalizedSampleBuffer[m_uSampleBufferStartIndex], 1, uSampleBufferFirstCopySize);
+	::vDSP_vsmulD(&m_arNormalizedSampleBuffer[m_uSampleBufferStartIndex], 1, &rScale, &m_arNormalizedSampleBuffer[m_uSampleBufferStartIndex], 1, uSampleBufferFirstCopySize);
 #else
-	::memcpy(&m_aNomalizedSampleBuffe[m_uSampleBuffeStatIndex], &pSampleBuffe[uSampleBuffeFistStatIndex], uSampleBuffeFistCopySize * sizeof(DAFShapeLayeFloat));
-	::vDSP_vabs(&m_aNomalizedSampleBuffe[m_uSampleBuffeStatIndex], 1, &m_aNomalizedSampleBuffe[m_uSampleBuffeStatIndex], 1, uSampleBuffeFistCopySize);
-	::vDSP_vsmul(&m_aNomalizedSampleBuffe[m_uSampleBuffeStatIndex], 1, &Scale, &m_aNomalizedSampleBuffe[m_uSampleBuffeStatIndex], 1, uSampleBuffeFistCopySize);
+	::memcpy(&m_arNormalizedSampleBuffer[m_uSampleBufferStartIndex], &prSampleBuffer[uSampleBufferFirstStartIndex], uSampleBufferFirstCopySize * sizeof(DAFShapeLayerFloat));
+	::vDSP_vabs(&m_arNormalizedSampleBuffer[m_uSampleBufferStartIndex], 1, &m_arNormalizedSampleBuffer[m_uSampleBufferStartIndex], 1, uSampleBufferFirstCopySize);
+	::vDSP_vsmul(&m_arNormalizedSampleBuffer[m_uSampleBufferStartIndex], 1, &rScale, &m_arNormalizedSampleBuffer[m_uSampleBufferStartIndex], 1, uSampleBufferFirstCopySize);
 #endif
 	
-	const std::size_t uSampleBuffeSecondStatIndex = uSampleBuffeFistStatIndex + uSampleBuffeFistCopySize;
-	const std::size_t uSampleBuffeSecondCopySize = uSampleBuffeSize - uSampleBuffeSecondStatIndex;
+	const std::size_t uSampleBufferSecondStartIndex = uSampleBufferFirstStartIndex + uSampleBufferFirstCopySize;
+	const std::size_t uSampleBufferSecondCopySize = uSampleBufferSize - uSampleBufferSecondStartIndex;
 #if DAF_SHAPE_LAYER_FLOAT_IS_DOUBLE
-	::vDSP_vspdp(&pSampleBuffe[uSampleBuffeSecondStatIndex], 1, &m_aNomalizedSampleBuffe[0], 1, uSampleBuffeSecondCopySize * sizeof(DAFShapeLayeFloat));
-	::vDSP_vabsD(&m_aNomalizedSampleBuffe[0], 1, &m_aNomalizedSampleBuffe[0], 1, uSampleBuffeSecondCopySize);
-	::vDSP_vsmulD(&m_aNomalizedSampleBuffe[0], 1, &Scale, &m_aNomalizedSampleBuffe[0], 1, uSampleBuffeSecondCopySize);
+	::vDSP_vspdp(&prSampleBuffer[uSampleBufferSecondStartIndex], 1, &m_arNormalizedSampleBuffer[0], 1, uSampleBufferSecondCopySize * sizeof(DAFShapeLayerFloat));
+	::vDSP_vabsD(&m_arNormalizedSampleBuffer[0], 1, &m_arNormalizedSampleBuffer[0], 1, uSampleBufferSecondCopySize);
+	::vDSP_vsmulD(&m_arNormalizedSampleBuffer[0], 1, &rScale, &m_arNormalizedSampleBuffer[0], 1, uSampleBufferSecondCopySize);
 #else
-	::memcpy(&m_aNomalizedSampleBuffe[0], &pSampleBuffe[uSampleBuffeSecondStatIndex], uSampleBuffeSecondCopySize * sizeof(DAFShapeLayeFloat));
-	::vDSP_vabs(&m_aNomalizedSampleBuffe[0], 1, &m_aNomalizedSampleBuffe[0], 1, uSampleBuffeSecondCopySize);
-	::vDSP_vsmul(&m_aNomalizedSampleBuffe[0], 1, &Scale, &m_aNomalizedSampleBuffe[0], 1, uSampleBuffeSecondCopySize);
+	::memcpy(&m_arNormalizedSampleBuffer[0], &prSampleBuffer[uSampleBufferSecondStartIndex], uSampleBufferSecondCopySize * sizeof(DAFShapeLayerFloat));
+	::vDSP_vabs(&m_arNormalizedSampleBuffer[0], 1, &m_arNormalizedSampleBuffer[0], 1, uSampleBufferSecondCopySize);
+	::vDSP_vsmul(&m_arNormalizedSampleBuffer[0], 1, &rScale, &m_arNormalizedSampleBuffer[0], 1, uSampleBufferSecondCopySize);
 #endif
 	
-	m_uSampleBuffeStatIndex = (m_uSampleBuffeStatIndex + uSampleBuffeFistCopySize + uSampleBuffeSecondCopySize) % m_uSampleBuffeSize;
+	m_uSampleBufferStartIndex = (m_uSampleBufferStartIndex + uSampleBufferFirstCopySize + uSampleBufferSecondCopySize) % m_uSampleBufferSize;
 	
-	const std::size_t uVisualizationColumnMultiplieBuffeSize = m_uSamplePointColumns / 2;
-	fo (std::size_t uRowIndex = 0; uRowIndex < m_uSamplePointRows; ++uRowIndex)
+	const std::size_t uVisualizationColumnMultiplierBufferSize = m_uSamplePointColumns / 2;
+	for (std::size_t uRowIndex = 0; uRowIndex < m_uSamplePointRows; ++uRowIndex)
 	{
-		const DAFShapeLayeFloat YOffset = -1.0 + uRowIndex * RowDelta + RowDelta;
-		const DAFShapeLayeFloat LineStipZOffset = YOffset;
+		const DAFShapeLayerFloat rYOffset = -1.0 + uRowIndex * rRowDelta + rRowDelta;
+		const DAFShapeLayerFloat rLineStripZOffset = rYOffset;
 		
 #if DAF_SHAPE_LAYER_FLOAT_IS_DOUBLE
-		::vDSP_vmsaD(&m_aNomalizedSampleBuffe[uRowIndex * m_uSamplePointColumns], 1, &m_aVisualizationColumnMultiplieBuffe[0], 1, &YOffset, &(m_aSampleBuffeVisualizationRowPoints[0].Y), 3 * 2, uVisualizationColumnMultiplieBuffeSize);
-		::vDSP_vmsaD(&m_aNomalizedSampleBuffe[uRowIndex * m_uSamplePointColumns + uVisualizationColumnMultiplieBuffeSize], 1, &m_aVisualizationColumnMultiplieBuffe[uVisualizationColumnMultiplieBuffeSize - 1], -1, &YOffset,
-					 &(m_aSampleBuffeVisualizationRowPoints[uVisualizationColumnMultiplieBuffeSize * 2].Y), 3 * 2, uVisualizationColumnMultiplieBuffeSize);
-		::vDSP_vfillD(&LineStipZOffset, &(m_aSampleBuffeVisualizationRowPoints[0].Z), 3, m_uSamplePointColumns * 2);
+		::vDSP_vmsaD(&m_arNormalizedSampleBuffer[uRowIndex * m_uSamplePointColumns], 1, &m_arVisualizationColumnMultiplierBuffer[0], 1, &rYOffset, &(m_aSampleBufferVisualizationRowPoints[0].rY), 3 * 2, uVisualizationColumnMultiplierBufferSize);
+		::vDSP_vmsaD(&m_arNormalizedSampleBuffer[uRowIndex * m_uSamplePointColumns + uVisualizationColumnMultiplierBufferSize], 1, &m_arVisualizationColumnMultiplierBuffer[uVisualizationColumnMultiplierBufferSize - 1], -1, &rYOffset,
+					 &(m_aSampleBufferVisualizationRowPoints[uVisualizationColumnMultiplierBufferSize * 2].rY), 3 * 2, uVisualizationColumnMultiplierBufferSize);
+		::vDSP_vfillD(&rLineStripZOffset, &(m_aSampleBufferVisualizationRowPoints[0].rZ), 3, m_uSamplePointColumns * 2);
 #else
-		::vDSP_vmsa(&m_aNomalizedSampleBuffe[uRowIndex * m_uSamplePointColumns], 1, &m_aVisualizationColumnMultiplieBuffe[0], 1, &YOffset, &(m_aSampleBuffeVisualizationRowPoints[0].Y), 3 * 2, uVisualizationColumnMultiplieBuffeSize);
-		::vDSP_vmsa(&m_aNomalizedSampleBuffe[uRowIndex * m_uSamplePointColumns + uVisualizationColumnMultiplieBuffeSize], 1, &m_aVisualizationColumnMultiplieBuffe[uVisualizationColumnMultiplieBuffeSize - 1], -1, &YOffset,
-					&(m_aSampleBuffeVisualizationRowPoints[uVisualizationColumnMultiplieBuffeSize * 2].Y), 3 * 2, uVisualizationColumnMultiplieBuffeSize);
-		::vDSP_vfill(&LineStipZOffset, &(m_aSampleBuffeVisualizationRowPoints[0].Z), 3, m_uSamplePointColumns * 2);
+		::vDSP_vmsa(&m_arNormalizedSampleBuffer[uRowIndex * m_uSamplePointColumns], 1, &m_arVisualizationColumnMultiplierBuffer[0], 1, &rYOffset, &(m_aSampleBufferVisualizationRowPoints[0].rY), 3 * 2, uVisualizationColumnMultiplierBufferSize);
+		::vDSP_vmsa(&m_arNormalizedSampleBuffer[uRowIndex * m_uSamplePointColumns + uVisualizationColumnMultiplierBufferSize], 1, &m_arVisualizationColumnMultiplierBuffer[uVisualizationColumnMultiplierBufferSize - 1], -1, &rYOffset,
+					&(m_aSampleBufferVisualizationRowPoints[uVisualizationColumnMultiplierBufferSize * 2].rY), 3 * 2, uVisualizationColumnMultiplierBufferSize);
+		::vDSP_vfill(&rLineStripZOffset, &(m_aSampleBufferVisualizationRowPoints[0].rZ), 3, m_uSamplePointColumns * 2);
 #endif
 
-		[m_pShapeLaye dawLineStipWithVetices:&m_aSampleBuffeVisualizationRowPoints[0]
-										   count:m_aSampleBuffeVisualizationRowPoints.size()
-										  stide:2
-										   colo:[UIColo whiteColo]];
+		[m_pShapeLayer drawLineStripWithVertices:&m_aSampleBufferVisualizationRowPoints[0]
+										   count:m_aSampleBufferVisualizationRowPoints.size()
+										  stride:2
+										   color:[UIColor whiteColor]];
 		
-		const DAFShapeLayeFloat TiangleStipZOffset = LineStipZOffset + RowDelta / 2.0;
+		const DAFShapeLayerFloat rTriangleStripZOffset = rLineStripZOffset + rRowDelta / 2.0;
 		
 #if DAF_SHAPE_LAYER_FLOAT_IS_DOUBLE
-		::vDSP_vfillD(&YOffset, &(m_aSampleBuffeVisualizationRowPoints[1].Y), 3 * 2, m_uSamplePointColumns);
-		::vDSP_vfillD(&TiangleStipZOffset, &(m_aSampleBuffeVisualizationRowPoints[0].Z), 3, m_uSamplePointColumns * 2);
+		::vDSP_vfillD(&rYOffset, &(m_aSampleBufferVisualizationRowPoints[1].rY), 3 * 2, m_uSamplePointColumns);
+		::vDSP_vfillD(&rTriangleStripZOffset, &(m_aSampleBufferVisualizationRowPoints[0].rZ), 3, m_uSamplePointColumns * 2);
 #else
-		::vDSP_vfill(&YOffset, &(m_aSampleBuffeVisualizationRowPoints[1].Y), 3 * 2, m_uSamplePointColumns);
-		::vDSP_vfill(&TiangleStipZOffset, &(m_aSampleBuffeVisualizationRowPoints[0].Z), 3, m_uSamplePointColumns * 2);
+		::vDSP_vfill(&rYOffset, &(m_aSampleBufferVisualizationRowPoints[1].rY), 3 * 2, m_uSamplePointColumns);
+		::vDSP_vfill(&rTriangleStripZOffset, &(m_aSampleBufferVisualizationRowPoints[0].rZ), 3, m_uSamplePointColumns * 2);
 #endif
 
-		[m_pShapeLaye dawTiangleStipWithVetices:&m_aSampleBuffeVisualizationRowPoints[0]
-											   count:m_aSampleBuffeVisualizationRowPoints.size()
-											  stide:1
-											   colo:[UIColo blackColo]];
+		[m_pShapeLayer drawTriangleStripWithVertices:&m_aSampleBufferVisualizationRowPoints[0]
+											   count:m_aSampleBufferVisualizationRowPoints.size()
+											  stride:1
+											   color:[UIColor blackColor]];
 	}
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- (void)stopSampleBuffeAnimation
+- (void)stopSampleBufferAnimation
 {
-	[m_pShapeLaye stopAnimation];
+	[m_pShapeLayer stopAnimation];
 }
 
 @end
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-SufaceiOS::Pivate::Pivate(SufaceiOS* pSuface) :
-	m_pSuface(pSuface),
-	m_pSufaceView([[DAFSufaceView alloc] initWithPivate:this]),
-	m_pViewComponent(std::make_shaed<UIViewComponent>())
+SurfaceiOS::Private::Private(SurfaceiOS* pSurface) :
+	m_pSurface(pSurface),
+	m_pSurfaceView([[DAFSurfaceView alloc] initWithPrivate:this]),
+	m_pViewComponent(std::make_shared<UIViewComponent>())
 {
-	m_pViewComponent->setView((__bidge void*)m_pSufaceView);
+	m_pViewComponent->setView((__bridge void*)m_pSurfaceView);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-SufaceiOS::Pivate::~Pivate()
+SurfaceiOS::Private::~Private()
 {
-	[m_pSufaceView detachPivate];
-}
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-void
-SufaceiOS::Pivate::DetachSuface()
-{
-	m_pSuface = nullpt;
-}
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-std::shaed_pt<Component>
-SufaceiOS::Pivate::GetComponent()
-{
-	etun m_pViewComponent;
+	[m_pSurfaceView detachPrivate];
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::Pivate::UpdateDimensions(double Width, double Height)
+SurfaceiOS::Private::DetachSurface()
 {
-	if ( m_pSuface != nullpt )
-		m_pSuface->UpdateDimensions(Width, Height);
+	m_pSurface = nullptr;
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+std::shared_ptr<Component>
+SurfaceiOS::Private::GetComponent()
+{
+	return m_pViewComponent;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::Pivate::UpdateAnimations()
+SurfaceiOS::Private::UpdateDimensions(double rWidth, double rHeight)
 {
-	if ( m_pSuface != nullpt )
-		m_pSuface->UpdateVisualizations();
+	if ( m_pSurface != nullptr )
+		m_pSurface->UpdateDimensions(rWidth, rHeight);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::Pivate::StatTouch(std::shaed_pt<Touch> pTouch)
+SurfaceiOS::Private::UpdateAnimations()
 {
-	if ( m_pSuface != nullpt )
-		m_pSuface->StatTouch(pTouch);
+	if ( m_pSurface != nullptr )
+		m_pSurface->UpdateVisualizations();
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::Pivate::UpdateTouch(std::shaed_pt<Touch> pTouch)
+SurfaceiOS::Private::StartTouch(std::shared_ptr<Touch> pTouch)
 {
-	if ( m_pSuface != nullpt )
-		m_pSuface->UpdateTouch(pTouch);
+	if ( m_pSurface != nullptr )
+		m_pSurface->StartTouch(pTouch);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::Pivate::StopTouch(std::shaed_pt<Touch> pTouch)
+SurfaceiOS::Private::UpdateTouch(std::shared_ptr<Touch> pTouch)
 {
-	if ( m_pSuface != nullpt )
-		m_pSuface->StopTouch(pTouch);
+	if ( m_pSurface != nullptr )
+		m_pSurface->UpdateTouch(pTouch);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::Pivate::Suspend()
+SurfaceiOS::Private::StopTouch(std::shared_ptr<Touch> pTouch)
 {
-	[m_pSufaceView suspend];
+	if ( m_pSurface != nullptr )
+		m_pSurface->StopTouch(pTouch);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::Pivate::Resume()
+SurfaceiOS::Private::Suspend()
 {
-	[m_pSufaceView esume];
+	[m_pSurfaceView suspend];
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::Pivate::StatTouchAnimation(std::shaed_pt<Touch> pTouch)
+SurfaceiOS::Private::Resume()
 {
-	[m_pSufaceView statAnimationWithTouch:pTouch];
+	[m_pSurfaceView resume];
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::Pivate::UpdateTouchAnimation(std::shaed_pt<Touch> pTouch)
+SurfaceiOS::Private::StartTouchAnimation(std::shared_ptr<Touch> pTouch)
 {
-	[m_pSufaceView updateAnimationWithTouch:pTouch];
+	[m_pSurfaceView startAnimationWithTouch:pTouch];
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::Pivate::StopTouchAnimation(std::shaed_pt<Touch> pTouch)
+SurfaceiOS::Private::UpdateTouchAnimation(std::shared_ptr<Touch> pTouch)
 {
-	[m_pSufaceView stopAnimationWithTouch:pTouch];
+	[m_pSurfaceView updateAnimationWithTouch:pTouch];
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::Pivate::StatSampleBuffeAnimation()
+SurfaceiOS::Private::StopTouchAnimation(std::shared_ptr<Touch> pTouch)
 {
-	[m_pSufaceView statSampleBuffeAnimation];
+	[m_pSurfaceView stopAnimationWithTouch:pTouch];
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::Pivate::UpdateSampleBuffeAnimation(const float* pSampleBuffe, const std::size_t uSampleBuffeSize)
+SurfaceiOS::Private::StartSampleBufferAnimation()
 {
-	[m_pSufaceView updateAnimationWithSampleBuffe:pSampleBuffe size:uSampleBuffeSize];
+	[m_pSurfaceView startSampleBufferAnimation];
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::Pivate::StopSampleBuffeAnimation()
+SurfaceiOS::Private::UpdateSampleBufferAnimation(const float* prSampleBuffer, const std::size_t uSampleBufferSize)
 {
-	[m_pSufaceView stopSampleBuffeAnimation];
-}
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-SufaceiOS::~SufaceiOS()
-{
-	m_pPivate->DetachSuface();
-}
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-SufaceiOS::SufaceiOS(double SampleRate,
-					   double MinimumFequency,
-					   double MaximumFequency,
-					   double MinimumAmplitude,
-					   double MaximumAmplitude) :
-	Suface(0.0, 0.0, SampleRate, MinimumFequency, MaximumFequency, MinimumAmplitude, MaximumAmplitude),
-	m_pPivate(new Pivate(this))
-{
-}
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-std::shaed_pt<Component>
-SufaceiOS::GetComponent()
-{
-	etun m_pPivate->GetComponent();
+	[m_pSurfaceView updateAnimationWithSampleBuffer:prSampleBuffer size:uSampleBufferSize];
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::Suspend()
+SurfaceiOS::Private::StopSampleBufferAnimation()
 {
-	m_pPivate->Suspend();
+	[m_pSurfaceView stopSampleBufferAnimation];
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+SurfaceiOS::~SurfaceiOS()
+{
+	m_pPrivate->DetachSurface();
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+SurfaceiOS::SurfaceiOS(double rSampleRate,
+					   double rMinimumFrequency,
+					   double rMaximumFrequency,
+					   double rMinimumAmplitude,
+					   double rMaximumAmplitude) :
+	Surface(0.0, 0.0, rSampleRate, rMinimumFrequency, rMaximumFrequency, rMinimumAmplitude, rMaximumAmplitude),
+	m_pPrivate(new Private(this))
+{
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+std::shared_ptr<Component>
+SurfaceiOS::GetComponent()
+{
+	return m_pPrivate->GetComponent();
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::Resume()
+SurfaceiOS::Suspend()
 {
-	m_pPivate->Resume();
+	m_pPrivate->Suspend();
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::StatTouchVisualization(std::shaed_pt<Touch> pTouch)
+SurfaceiOS::Resume()
 {
-	m_pPivate->StatTouchAnimation(pTouch);
+	m_pPrivate->Resume();
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::UpdateTouchVisualization(std::shaed_pt<Touch> pTouch)
+SurfaceiOS::StartTouchVisualization(std::shared_ptr<Touch> pTouch)
 {
-	m_pPivate->UpdateTouchAnimation(pTouch);
+	m_pPrivate->StartTouchAnimation(pTouch);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::StopTouchVisualization(std::shaed_pt<Touch> pTouch)
+SurfaceiOS::UpdateTouchVisualization(std::shared_ptr<Touch> pTouch)
 {
-	m_pPivate->StopTouchAnimation(pTouch);
+	m_pPrivate->UpdateTouchAnimation(pTouch);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::StatSampleBuffeVisualization()
+SurfaceiOS::StopTouchVisualization(std::shared_ptr<Touch> pTouch)
 {
-	m_pPivate->StatSampleBuffeAnimation();
+	m_pPrivate->StopTouchAnimation(pTouch);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::UpdateSampleBuffeVisualization(const float* pSampleBuffe, const std::size_t uSampleBuffeSize)
+SurfaceiOS::StartSampleBufferVisualization()
 {
-	m_pPivate->UpdateSampleBuffeAnimation(pSampleBuffe, uSampleBuffeSize);
+	m_pPrivate->StartSampleBufferAnimation();
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-SufaceiOS::StopSampleBuffeVisualization()
+SurfaceiOS::UpdateSampleBufferVisualization(const float* prSampleBuffer, const std::size_t uSampleBufferSize)
 {
-	m_pPivate->StopSampleBuffeAnimation();
+	m_pPrivate->UpdateSampleBufferAnimation(prSampleBuffer, uSampleBufferSize);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-std::shaed_pt<Suface>
-SufaceiOS::Ceate(double SampleRate,
-				   double MinimumFequency,
-				   double MaximumFequency,
-				   double MinimumAmplitude,
-				   double MaximumAmplitude)
+void
+SurfaceiOS::StopSampleBufferVisualization()
 {
-	etun std::shaed_pt<SufaceiOS>(new SufaceiOS(SampleRate, MinimumFequency, MaximumFequency, MinimumAmplitude, MaximumAmplitude));
+	m_pPrivate->StopSampleBufferAnimation();
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+std::shared_ptr<Surface>
+SurfaceiOS::Create(double rSampleRate,
+				   double rMinimumFrequency,
+				   double rMaximumFrequency,
+				   double rMinimumAmplitude,
+				   double rMaximumAmplitude)
+{
+	return std::shared_ptr<SurfaceiOS>(new SurfaceiOS(rSampleRate, rMinimumFrequency, rMaximumFrequency, rMinimumAmplitude, rMaximumAmplitude));
 }

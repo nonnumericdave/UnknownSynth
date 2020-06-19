@@ -1,117 +1,117 @@
 //
-//  Suface.cpp
+//  Surface.cpp
 //  UnknownSynth
 //
-//  Ceated by David Floes on 1/1/18.
-//  Copyight (c) 2018 David Floes. All ights eseved.
+//  Created by David Flores on 1/1/18.
+//  Copyright (c) 2018 David Flores. All rights reserved.
 //
 
-#include "PecompiledHeade.h"
+#include "PrecompiledHeader.h"
 
-#include "Suface.h"
+#include "Surface.h"
 
-#include "EnvelopePocesso.h"
+#include "EnvelopeProcessor.h"
 #include "Signal.h"
-#include "SinusoidalWavefom.h"
+#include "SinusoidalWaveform.h"
 #include "Touch.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-static Suface::PFN_Ceate g_pfnCeate = nullpt;
+static Surface::PFN_Create g_pfnCreate = nullptr;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 bool
-Suface::Registe(PFN_Ceate pfnCeate)
+Surface::Register(PFN_Create pfnCreate)
 {
-	::g_pfnCeate = pfnCeate;
+	::g_pfnCreate = pfnCreate;
 	
-	etun tue;
+	return true;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-std::shaed_pt<Suface>
-Suface::Ceate(double SampleRate,
-				double MinimumFequency,
-				double MaximumFequency,
-				double MinimumAmplitude,
-				double MaximumAmplitude)
+std::shared_ptr<Surface>
+Surface::Create(double rSampleRate,
+				double rMinimumFrequency,
+				double rMaximumFrequency,
+				double rMinimumAmplitude,
+				double rMaximumAmplitude)
 {
-	etun
-		::g_pfnCeate == nullpt ?
-			nullpt :
-			::g_pfnCeate(SampleRate, MinimumFequency, MaximumFequency, MinimumAmplitude, MaximumAmplitude);
+	return
+		::g_pfnCreate == nullptr ?
+			nullptr :
+			::g_pfnCreate(rSampleRate, rMinimumFrequency, rMaximumFrequency, rMinimumAmplitude, rMaximumAmplitude);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Suface::~Suface()
+Surface::~Surface()
 {
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-Suface::Stat()
+Surface::Start()
 {
-	StatSampleBuffeVisualization();
+	StartSampleBufferVisualization();
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-Suface::Stop()
+Surface::Stop()
 {
-	StopSampleBuffeVisualization();
+	StopSampleBufferVisualization();
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-Suface::UpdateSampleRate(double SampleRate)
+Surface::UpdateSampleRate(double rSampleRate)
 {
 	std::unique_lock<std::mutex> uniqueLock(m_mutex);
 	
-	m_SampleRate = SampleRate;
+	m_rSampleRate = rSampleRate;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-Suface::GeneateNextSampleBuffe(float* pSampleBuffe, const std::size_t uSampleBuffeSize)
+Surface::GenerateNextSampleBuffer(float* prSampleBuffer, const std::size_t uSampleBufferSize)
 {
-	std::vecto<std::shaed_pt<Signal> > aSignals;
-	std::vecto<std::shaed_pt<Signal> > aWaitingFoCompletionSignals;
+	std::vector<std::shared_ptr<Signal> > aSignals;
+	std::vector<std::shared_ptr<Signal> > aWaitingForCompletionSignals;
 	
 	std::unique_lock<std::mutex> uniqueLock(m_mutex);
 	
-	std::size_t uSignalCount = m_mapTouchSignal.size() + m_setWaitingFoCompletionSignals.size();
+	std::size_t uSignalCount = m_mapTouchSignal.size() + m_setWaitingForCompletionSignals.size();
 	
 	if ( uSignalCount == 0 )
 	{
 		uniqueLock.unlock();
 		
-		fo (std::size_t uSampleBuffeIndex = 0; uSampleBuffeIndex < uSampleBuffeSize; ++uSampleBuffeIndex)
-			pSampleBuffe[uSampleBuffeIndex] = 0.0;
+		for (std::size_t uSampleBufferIndex = 0; uSampleBufferIndex < uSampleBufferSize; ++uSampleBufferIndex)
+			prSampleBuffer[uSampleBufferIndex] = 0.0;
 	}
 	else
 	{
-		fo (auto const& it : m_mapTouchSignal)
+		for (auto const& it : m_mapTouchSignal)
 			aSignals.push_back(it.second);
 		
-		fo (auto const& pSignal : m_setWaitingFoCompletionSignals)
+		for (auto const& pSignal : m_setWaitingForCompletionSignals)
 		{
 			aSignals.push_back(pSignal);
-			aWaitingFoCompletionSignals.push_back(pSignal);
+			aWaitingForCompletionSignals.push_back(pSignal);
 		}
 		
 		uniqueLock.unlock();
 		
-		aSignals[0]->GeneateNextSampleBuffe(pSampleBuffe, uSampleBuffeSize);
+		aSignals[0]->GenerateNextSampleBuffer(prSampleBuffer, uSampleBufferSize);
 		
-		fo (std::size_t uIndex = 1; uIndex < uSignalCount; ++uIndex)
-			aSignals[uIndex]->AggegateNextSampleBuffe(pSampleBuffe, uSampleBuffeSize);
+		for (std::size_t uIndex = 1; uIndex < uSignalCount; ++uIndex)
+			aSignals[uIndex]->AggregateNextSampleBuffer(prSampleBuffer, uSampleBufferSize);
 		
-		fo (auto const& pSignal : aWaitingFoCompletionSignals)
+		for (auto const& pSignal : aWaitingForCompletionSignals)
 		{
-			if ( pSignal->GetPocesso()->IsComplete() )
+			if ( pSignal->GetProcessor()->IsComplete() )
 			{
 				uniqueLock.lock();
 				
-				m_setWaitingFoCompletionSignals.ease(pSignal);
+				m_setWaitingForCompletionSignals.erase(pSignal);
 				
 				uniqueLock.unlock();
 			}
@@ -120,92 +120,92 @@ Suface::GeneateNextSampleBuffe(float* pSampleBuffe, const std::size_t uSampleBuf
 	
 	uniqueLock.lock();
 	
-	m_aUnvisualizedSampleBuffe.inset(m_aUnvisualizedSampleBuffe.end(), &pSampleBuffe[0], &pSampleBuffe[uSampleBuffeSize]);
+	m_arUnvisualizedSampleBuffer.insert(m_arUnvisualizedSampleBuffer.end(), &prSampleBuffer[0], &prSampleBuffer[uSampleBufferSize]);
 	
 	uniqueLock.unlock();
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Suface::Suface(double Width,
-				 double Height,
-				 double SampleRate,
-				 double MinimumFequency,
-				 double MaximumFequency,
-				 double MinimumAmplitude,
-				 double MaximumAmplitude) :
-	m_Width(Width),
-	m_Height(Height),
-	m_SampleRate(SampleRate),
-	m_MinimumFequency(MinimumFequency),
-	m_MaximumFequency(MaximumFequency),
-	m_MinimumAmplitude(MinimumAmplitude),
-	m_MaximumAmplitude(MaximumAmplitude)
+Surface::Surface(double rWidth,
+				 double rHeight,
+				 double rSampleRate,
+				 double rMinimumFrequency,
+				 double rMaximumFrequency,
+				 double rMinimumAmplitude,
+				 double rMaximumAmplitude) :
+	m_rWidth(rWidth),
+	m_rHeight(rHeight),
+	m_rSampleRate(rSampleRate),
+	m_rMinimumFrequency(rMinimumFrequency),
+	m_rMaximumFrequency(rMaximumFrequency),
+	m_rMinimumAmplitude(rMinimumAmplitude),
+	m_rMaximumAmplitude(rMaximumAmplitude)
 {
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-Suface::UpdateDimensions(double Width, double Height)
+Surface::UpdateDimensions(double rWidth, double rHeight)
 {
 	std::unique_lock<std::mutex> uniqueLock(m_mutex);
 
-	m_Width = Width;
-	m_Height = Height;
+	m_rWidth = rWidth;
+	m_rHeight = rHeight;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-Suface::UpdateVisualizations()
+Surface::UpdateVisualizations()
 {
 	std::unique_lock<std::mutex> uniqueLock(m_mutex);
 	
-	std::vecto<float> aUnvisualizedSampleBuffe;
-	aUnvisualizedSampleBuffe.swap(m_aUnvisualizedSampleBuffe);
+	std::vector<float> arUnvisualizedSampleBuffer;
+	arUnvisualizedSampleBuffer.swap(m_arUnvisualizedSampleBuffer);
 
 	uniqueLock.unlock();
 	
-	UpdateSampleBuffeVisualization(aUnvisualizedSampleBuffe.data(), aUnvisualizedSampleBuffe.size());
+	UpdateSampleBufferVisualization(arUnvisualizedSampleBuffer.data(), arUnvisualizedSampleBuffer.size());
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-Suface::StatTouch(std::shaed_pt<Touch> pTouch)
+Surface::StartTouch(std::shared_ptr<Touch> pTouch)
 {
-	StatTouchVisualization(pTouch);
+	StartTouchVisualization(pTouch);
 	
-	double Fequency = 0.0;
-	double Amplitude = 0.0;
-	GetFequencyAndAmplitudeFoTouch(pTouch, Fequency, Amplitude);
+	double rFrequency = 0.0;
+	double rAmplitude = 0.0;
+	GetFrequencyAndAmplitudeForTouch(pTouch, rFrequency, rAmplitude);
 	
 	std::unique_lock<std::mutex> uniqueLock(m_mutex);
 	
-	std::shaed_pt<SinusoidalWavefom> pSinusoidalWavefom = std::make_shaed<SinusoidalWavefom>();
-	std::shaed_pt<EnvelopePocesso> pEnvelopePocesso = std::make_shaed<EnvelopePocesso>(m_SampleRate, 5.0, 2.0, 0.5, 5.0);
-	std::shaed_pt<Signal> pSignal = std::make_shaed<Signal>(m_SampleRate, Fequency, Amplitude, pSinusoidalWavefom, pEnvelopePocesso);
+	std::shared_ptr<SinusoidalWaveform> pSinusoidalWaveform = std::make_shared<SinusoidalWaveform>();
+	std::shared_ptr<EnvelopeProcessor> pEnvelopeProcessor = std::make_shared<EnvelopeProcessor>(m_rSampleRate, 5.0, 2.0, 0.5, 5.0);
+	std::shared_ptr<Signal> pSignal = std::make_shared<Signal>(m_rSampleRate, rFrequency, rAmplitude, pSinusoidalWaveform, pEnvelopeProcessor);
 	
 	m_mapTouchSignal[pTouch] = pSignal;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-Suface::UpdateTouch(std::shaed_pt<Touch> pTouch)
+Surface::UpdateTouch(std::shared_ptr<Touch> pTouch)
 {
 	UpdateTouchVisualization(pTouch);
 	
-	double Fequency = 0.0;
-	double Amplitude = 0.0;
-	GetFequencyAndAmplitudeFoTouch(pTouch, Fequency, Amplitude);
+	double rFrequency = 0.0;
+	double rAmplitude = 0.0;
+	GetFrequencyAndAmplitudeForTouch(pTouch, rFrequency, rAmplitude);
 
 	std::unique_lock<std::mutex> uniqueLock(m_mutex);
 	
-	std::shaed_pt<Signal> pSignal = m_mapTouchSignal[pTouch];
-	pSignal->SetFequency(Fequency);
-	pSignal->SetAmplitude(Amplitude);
+	std::shared_ptr<Signal> pSignal = m_mapTouchSignal[pTouch];
+	pSignal->SetFrequency(rFrequency);
+	pSignal->SetAmplitude(rAmplitude);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-Suface::StopTouch(std::shaed_pt<Touch> pTouch)
+Surface::StopTouch(std::shared_ptr<Touch> pTouch)
 {
 	StopTouchVisualization(pTouch);
 	
@@ -213,44 +213,44 @@ Suface::StopTouch(std::shaed_pt<Touch> pTouch)
 
 	auto const& it = m_mapTouchSignal.find(pTouch);
 	
-	std::shaed_pt<Signal> pSignal = it->second;
-	std::shaed_pt<IPocesso> pPocesso = pSignal->GetPocesso();
+	std::shared_ptr<Signal> pSignal = it->second;
+	std::shared_ptr<IProcessor> pProcessor = pSignal->GetProcessor();
 	
 	uniqueLock.unlock();
 	
-	bool bWaitFoCompletion = pPocesso != nullpt && ! pPocesso->IsComplete();
+	bool bWaitForCompletion = pProcessor != nullptr && ! pProcessor->IsComplete();
 	
 	uniqueLock.lock();
 	
-	if ( bWaitFoCompletion )
-		m_setWaitingFoCompletionSignals.inset(pSignal);
+	if ( bWaitForCompletion )
+		m_setWaitingForCompletionSignals.insert(pSignal);
 	
-	m_mapTouchSignal.ease(it);
+	m_mapTouchSignal.erase(it);
 	
 	uniqueLock.unlock();
 	
-	if ( bWaitFoCompletion )
-		pPocesso->RequestCompletion();
+	if ( bWaitForCompletion )
+		pProcessor->RequestCompletion();
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 void
-Suface::GetFequencyAndAmplitudeFoTouch(std::shaed_pt<Touch> pTouch,
-										  double& Fequency,
-										  double& Amplitude)
+Surface::GetFrequencyAndAmplitudeForTouch(std::shared_ptr<Touch> pTouch,
+										  double& rFrequency,
+										  double& rAmplitude)
 {
 	std::unique_lock<std::mutex> uniqueLock(m_mutex);
 	
-	const double MinSufaceX = 0;
-	const double MaxSufaceX = m_Width;
-	const double MinSufaceY = 0;
-	const double MaxSufaceY = m_Height;
+	const double rMinSurfaceX = 0;
+	const double rMaxSurfaceX = m_rWidth;
+	const double rMinSurfaceY = 0;
+	const double rMaxSurfaceY = m_rHeight;
 
 	uniqueLock.unlock();
 	
-	const double TouchX = pTouch->GetX();
-	const double TouchY = pTouch->GetY();
+	const double rTouchX = pTouch->GetX();
+	const double rTouchY = pTouch->GetY();
 
-	Fequency = (m_MinimumFequency * (MaxSufaceX - TouchX) + m_MaximumFequency * (TouchX - MinSufaceX)) / (MaxSufaceX - MinSufaceX);
-	Amplitude = (m_MinimumAmplitude * (MaxSufaceY - TouchY) + m_MaximumAmplitude * (TouchY - MinSufaceY)) / (MaxSufaceY - MinSufaceY);
+	rFrequency = (m_rMinimumFrequency * (rMaxSurfaceX - rTouchX) + m_rMaximumFrequency * (rTouchX - rMinSurfaceX)) / (rMaxSurfaceX - rMinSurfaceX);
+	rAmplitude = (m_rMinimumAmplitude * (rMaxSurfaceY - rTouchY) + m_rMaximumAmplitude * (rTouchY - rMinSurfaceY)) / (rMaxSurfaceY - rMinSurfaceY);
 }
